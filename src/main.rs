@@ -1,6 +1,6 @@
 #![warn(clippy::all, clippy::pedantic)]
 
-use bevy::ecs::event::Event;
+use bevy::math::Vec4Swizzles;
 use bevy::prelude::*;
 use bevy::render::camera::RenderTarget;
 use bevy::render::texture::ImageSettings;
@@ -86,7 +86,8 @@ pub enum Selection {
 pub struct Mouse {
     pub is_in_window: bool,
     pub window_position: Vec2,
-    pub world_position: Vec2,
+    pub world_position: Vec3,
+    pub holding_lmb: bool,
 }
 
 pub struct GameState {
@@ -117,6 +118,7 @@ pub fn setup_mouse(mut commands: Commands) {
         is_in_window: false,
         window_position: Default::default(),
         world_position: Default::default(),
+        holding_lmb: false,
     })
 }
 
@@ -199,39 +201,51 @@ pub fn place_tile(
     mut update_tilemap_event_writer: EventWriter<UpdateTilemapEvent>,
     game_state: Res<GameState>,
     mouse: Res<Mouse>,
-    mouse_input: Res<Input<MouseButton>>,
-    mut tile_storage_query: Query<&mut TileStorage>,
+    tilemap_query: Query<(
+        &TilemapSize,
+        &TilemapGridSize,
+        &TilemapType,
+        &TileStorage,
+        &Transform,
+    )>,
 ) {
-    if mouse_input.just_pressed(MouseButton::Left) {
-        let position = world_position_to_index(mouse.world_position);
-        let tile_position = TilePos {
-            x: position.0 as u32,
-            y: position.1 as u32,
-        };
-        println!(
-            "Attempting to place tile at: x: {}, y: {}",
-            tile_position.x, tile_position.y
-        );
-        if let Ok(tile_storage) = tile_storage_query.get_single_mut() {
-            if let Some(tile_entity) = tile_storage.get(&tile_position) {
-                commands.entity(tile_entity).remove::<GrassTile>();
-                commands.entity(tile_entity).remove::<DirtTile>();
-                commands.entity(tile_entity).remove::<WaterTile>();
-                match game_state.selection {
-                    Selection::Grass => {
-                        commands.entity(tile_entity).insert(GrassTile {});
+    if mouse.holding_lmb {
+        for (map_size, grid_size, map_type, tile_storage, map_transform) in tilemap_query.iter() {
+            // Grab the cursor position from the `Res<CursorPos>`
+            let cursor_pos: Vec3 = mouse.world_position;
+            // We need to make sure that the cursor's world position is correct relative to the map
+            // due to any map transformation.
+            let cursor_in_map_pos: Vec2 = {
+                // Extend the cursor_pos vec3 by 1.0
+                let cursor_pos = Vec4::from((cursor_pos, 1.0));
+                let cursor_in_map_pos = map_transform.compute_matrix().inverse() * cursor_pos;
+                cursor_in_map_pos.xy()
+            };
+            // Once we have a world position we can transform it into a possible tile position.
+            if let Some(tile_position) =
+                TilePos::from_world_pos(&cursor_in_map_pos, map_size, grid_size, map_type)
+            {
+                // My code
+                if let Some(tile_entity) = tile_storage.get(&tile_position) {
+                    commands.entity(tile_entity).remove::<GrassTile>();
+                    commands.entity(tile_entity).remove::<DirtTile>();
+                    commands.entity(tile_entity).remove::<WaterTile>();
+                    match game_state.selection {
+                        Selection::Grass => {
+                            commands.entity(tile_entity).insert(GrassTile {});
+                        }
+                        Selection::Dirt => {
+                            commands.entity(tile_entity).insert(DirtTile {});
+                        }
+                        Selection::Water => {
+                            commands.entity(tile_entity).insert(WaterTile {});
+                        }
+                        _ => {
+                            // Do Nothing
+                        }
                     }
-                    Selection::Dirt => {
-                        commands.entity(tile_entity).insert(DirtTile {});
-                    }
-                    Selection::Water => {
-                        commands.entity(tile_entity).insert(WaterTile {});
-                    }
-                    _ => {
-                        // Do Nothing
-                    }
+                    update_tilemap_event_writer.send(UpdateTilemapEvent {});
                 }
-                update_tilemap_event_writer.send(UpdateTilemapEvent {});
             }
         }
     }
@@ -292,41 +306,25 @@ pub fn update_selection(keyboard: Res<Input<KeyCode>>, mut game_state: ResMut<Ga
 
 pub fn update_mouse(
     mut mouse: ResMut<Mouse>,
+    mut mouse_input: Res<Input<MouseButton>>,
     windows: Res<Windows>,
-    camera_query: Query<(&Camera, &GlobalTransform)>,
+    camera_q: Query<(&Transform, &Camera)>,
+    mut cursor_moved_events: EventReader<CursorMoved>,
 ) {
-    let (camera, camera_transform) = camera_query.single();
-
-    // Get the window that the camera is displaying to (or the primary window)
-    let window = if let RenderTarget::Window(id) = camera.target {
-        windows.get(id).unwrap()
-    } else {
-        windows.get_primary().unwrap()
-    };
-
-    // Check if the cursor is inside or outside the window.
-    if let Some(screen_position) = window.cursor_position() {
-        // Cursor is inside the window.
-        mouse.is_in_window = true;
-        mouse.window_position = screen_position;
-
-        // Get the size of the window
-        let window_size = Vec2::new(window.width(), window.height());
-
-        // Convert screen position [0..resolution] to ndc [-1..1] (gpu coordinates)
-        let ndc = (screen_position / window_size) * 2.0 - Vec2::ONE;
-
-        // Matrix for undoing the projection and camera transform
-        let ndc_to_world = camera_transform.compute_matrix() * camera.projection_matrix().inverse();
-
-        // Use it to convert ndc to world-space coordinates
-        let world_position = ndc_to_world.project_point3(ndc.extend(-1.0));
-
-        // Reduce it to a 2D value and assign.
-        mouse.world_position = world_position.truncate();
-    } else {
-        // Cursor is not inside the window.
-        mouse.is_in_window = false;
+    for cursor_moved in cursor_moved_events.iter() {
+        // To get the mouse's world position, we have to transform its window position by
+        // any transforms on the camera. This is done by projecting the cursor position into
+        // camera space (world space).
+        for (cam_t, cam) in camera_q.iter() {
+            let cursor_pos = cursor_pos_in_world(&windows, cursor_moved.position, cam_t, cam);
+            mouse.world_position = cursor_pos;
+        }
+    }
+    // Left Mouse Button Held
+    if mouse_input.just_pressed(MouseButton::Left) {
+        mouse.holding_lmb = true;
+    } else if mouse_input.just_released(MouseButton::Left) {
+        mouse.holding_lmb = false;
     }
 }
 
@@ -335,4 +333,23 @@ pub fn world_position_to_index(position: Vec2) -> (i32, i32) {
     let x_index = position.x / TILE_SIZE as f32;
     let y_index = position.y / TILE_SIZE as f32;
     (x_index as i32, y_index as i32)
+}
+
+// Converts the cursor position into a world position, taking into account any transforms applied
+// the camera.
+pub fn cursor_pos_in_world(
+    windows: &Windows,
+    cursor_pos: Vec2,
+    cam_t: &Transform,
+    cam: &Camera,
+) -> Vec3 {
+    let window = windows.primary();
+
+    let window_size = Vec2::new(window.width(), window.height());
+
+    // Convert screen position [0..resolution] to ndc [-1..1]
+    // (ndc = normalized device coordinates)
+    let ndc_to_world = cam_t.compute_matrix() * cam.projection_matrix().inverse();
+    let ndc = (cursor_pos / window_size) * 2.0 - Vec2::ONE;
+    ndc_to_world.project_point3(ndc.extend(0.0))
 }
