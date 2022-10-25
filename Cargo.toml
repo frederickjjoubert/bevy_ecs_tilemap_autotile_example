@@ -5,4 +5,21 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+# Enable only a small amount of optimization in debug mode
+[profile.dev]
+opt-level = 1
+
+# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+[profile.dev.package."*"]
+opt-level = 3
+
+# Note I added the above optimizations and dynamic linking feature for Bevy following the Bevy setup: https://bevyengine.org/learn/book/getting-started/setup/
+
 [dependencies]
+bevy_ecs_tilemap = "0.8.0" # https://crates.io/crates/bevy_ecs_tilemap
+bevy-inspector-egui = "0.13.0"
+
+# Guide https://bevy-cheatbook.github.io/setup/bevy-config.html
+[dependencies.bevy]
+version = "0.8.*"
+
