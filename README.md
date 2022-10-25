@@ -3,6 +3,12 @@
 This project aims to be an exploration of performing AutoTiling on top of the `bevy_ecs_tilemap` crate as part of the
 following [RFC](https://github.com/StarArawn/bevy_ecs_tilemap/discussions/326) to add AutoTiling to `bevy_ecs_tilemap`.
 
+# Assets
+
+I am using the following free assets, please note their READMES and LICENSES.
+
+- https://cupnooble.itch.io/sprout-lands-asset-pack
+
 # Tooling
 
 ## clippy
