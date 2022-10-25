@@ -3,6 +3,15 @@
 This project aims to be an exploration of performing AutoTiling on top of the `bevy_ecs_tilemap` crate as part of the
 following [RFC](https://github.com/StarArawn/bevy_ecs_tilemap/discussions/326) to add AutoTiling to `bevy_ecs_tilemap`.
 
+# Controls
+
+Click to place tiles.
+
+Press 0 to select blank tiles.
+Press 1 to select grass tiles.
+Press 2 to select dirt tiles.
+Press 3 to select water tiles.
+
 # Assets
 
 I am using the following free assets, please note their READMES and LICENSES.
