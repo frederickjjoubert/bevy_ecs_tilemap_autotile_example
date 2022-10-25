@@ -2,7 +2,6 @@
 
 use bevy::math::Vec4Swizzles;
 use bevy::prelude::*;
-use bevy::render::camera::RenderTarget;
 use bevy::render::texture::ImageSettings;
 use bevy::window::PresentMode;
 use bevy_ecs_tilemap::prelude::*;
@@ -69,9 +68,115 @@ enum Setup {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Sprite {
     Blank,
-    Grass,
-    Dirt,
-    Water,
+    // Grass Row 1
+    Grass_000_010_010,
+    Grass_000_011_010,
+    Grass_000_111_010,
+    Grass_000_110_010,
+    Grass_110_111_010,
+    Grass_000_111_011,
+    Grass_000_111_110,
+    Grass_011_111_010,
+    Grass_000_011_011,
+    Grass_010_111_111,
+    Grass_000_111_111,
+    Grass_000_110_110,
+    // Grass Row 2
+    Grass_010_010_010,
+    Grass_010_011_010,
+    Grass_010_111_010,
+    Grass_010_110_010,
+    Grass_010_011_011,
+    Grass_011_111_111,
+    Grass_110_111_111,
+    Grass_010_110_110,
+    Grass_011_011_011,
+    Grass_011_111_110,
+    Grass_000_000_000, // Blank
+    Grass_110_111_110,
+    // Grass Row 3
+    Grass_010_010_000,
+    Grass_010_011_000,
+    Grass_010_111_000,
+    Grass_010_110_000,
+    Grass_011_011_010,
+    Grass_111_111_011,
+    Grass_111_111_110,
+    Grass_110_110_010,
+    Grass_011_111_011,
+    Grass_111_111_111,
+    Grass_110_111_011,
+    Grass_110_110_110,
+    // Grass Row 4
+    Grass_000_010_000,
+    Grass_000_011_000,
+    Grass_000_111_000,
+    Grass_000_110_000,
+    Grass_010_111_110,
+    Grass_011_111_000,
+    Grass_110_111_000,
+    Grass_010_111_011,
+    Grass_011_011_000,
+    Grass_111_111_000,
+    Grass_111_111_010,
+    Grass_110_110_000,
+    // Dirt Row 1
+    Dirt_000_010_010,
+    Dirt_000_011_010,
+    Dirt_000_111_010,
+    Dirt_000_110_010,
+    Dirt_110_111_010,
+    Dirt_000_111_011,
+    Dirt_000_111_110,
+    Dirt_011_111_010,
+    Dirt_000_011_011,
+    Dirt_010_111_111,
+    Dirt_000_111_111,
+    Dirt_000_110_110,
+    // Dirt Row 2
+    Dirt_010_010_010,
+    Dirt_010_011_010,
+    Dirt_010_111_010,
+    Dirt_010_110_010,
+    Dirt_010_011_011,
+    Dirt_011_111_111,
+    Dirt_110_111_111,
+    Dirt_010_110_110,
+    Dirt_011_011_011,
+    Dirt_011_111_110,
+    Dirt_000_000_000, // Blank
+    Dirt_110_111_110,
+    // Dirt Row 3
+    Dirt_010_010_000,
+    Dirt_010_011_000,
+    Dirt_010_111_000,
+    Dirt_010_110_000,
+    Dirt_011_011_010,
+    Dirt_111_111_011,
+    Dirt_111_111_110,
+    Dirt_110_110_010,
+    Dirt_011_111_011,
+    Dirt_111_111_111,
+    Dirt_110_111_011,
+    Dirt_110_110_110,
+    // Dirt Row 4
+    Dirt_000_010_000,
+    Dirt_000_011_000,
+    Dirt_000_111_000,
+    Dirt_000_110_000,
+    Dirt_010_111_110,
+    Dirt_011_111_000,
+    Dirt_110_111_000,
+    Dirt_010_111_011,
+    Dirt_011_011_000,
+    Dirt_111_111_000,
+    Dirt_111_111_010,
+    Dirt_110_110_000,
+    // Water
+    Water_0,
+    Water_1,
+    Water_2,
+    Water_3,
 }
 
 #[derive(Debug)]
@@ -123,13 +228,119 @@ pub fn setup_mouse(mut commands: Commands) {
 }
 
 pub fn setup_sprites(mut commands: Commands) {
-    // TODO: Populate this for all sprites, first need to combine all sprites into one big file (Pain Point).
     let sprites = Sprites {
         sprite_lookup_table: HashMap::from([
-            (Sprite::Blank, 0),
-            (Sprite::Grass, 1),
-            (Sprite::Dirt, 2),
-            (Sprite::Water, 3),
+            // Grass Row 1
+            (Sprite::Grass_000_010_010, 0),
+            (Sprite::Grass_000_011_010, 1),
+            (Sprite::Grass_000_111_010, 2),
+            (Sprite::Grass_000_110_010, 3),
+            (Sprite::Grass_110_111_010, 4),
+            (Sprite::Grass_000_111_011, 5),
+            (Sprite::Grass_000_111_110, 6),
+            (Sprite::Grass_011_111_010, 7),
+            (Sprite::Grass_000_011_011, 8),
+            (Sprite::Grass_010_111_111, 9),
+            (Sprite::Grass_000_111_111, 10),
+            (Sprite::Grass_000_110_110, 11),
+            // Grass Row 2
+            (Sprite::Grass_010_010_010, 12),
+            (Sprite::Grass_010_011_010, 13),
+            (Sprite::Grass_010_111_010, 14),
+            (Sprite::Grass_010_110_010, 15),
+            (Sprite::Grass_010_011_011, 16),
+            (Sprite::Grass_011_111_111, 17),
+            (Sprite::Grass_110_111_111, 18),
+            (Sprite::Grass_010_110_110, 19),
+            (Sprite::Grass_011_011_011, 20),
+            (Sprite::Grass_011_111_110, 21),
+            (Sprite::Grass_000_000_000, 22),
+            (Sprite::Grass_110_111_110, 23),
+            // Grass Row 3
+            (Sprite::Grass_010_010_000, 24),
+            (Sprite::Grass_010_011_000, 25),
+            (Sprite::Grass_010_111_000, 26),
+            (Sprite::Grass_010_110_000, 27),
+            (Sprite::Grass_011_011_010, 28),
+            (Sprite::Grass_111_111_011, 29),
+            (Sprite::Grass_111_111_110, 30),
+            (Sprite::Grass_110_110_010, 31),
+            (Sprite::Grass_011_111_011, 32),
+            (Sprite::Grass_111_111_111, 33),
+            (Sprite::Grass_110_111_011, 34),
+            (Sprite::Grass_110_110_110, 35),
+            // Grass Row 4
+            (Sprite::Grass_000_010_000, 36),
+            (Sprite::Grass_000_011_000, 37),
+            (Sprite::Grass_000_111_000, 38),
+            (Sprite::Grass_000_110_000, 39),
+            (Sprite::Grass_010_111_110, 40),
+            (Sprite::Grass_011_111_000, 41),
+            (Sprite::Grass_110_111_000, 42),
+            (Sprite::Grass_010_111_011, 43),
+            (Sprite::Grass_011_011_000, 44),
+            (Sprite::Grass_111_111_000, 45),
+            (Sprite::Grass_111_111_010, 46),
+            (Sprite::Grass_110_110_000, 47),
+            // Dirt Row 1
+            (Sprite::Dirt_000_010_010, 48),
+            (Sprite::Dirt_000_011_010, 49),
+            (Sprite::Dirt_000_111_010, 50),
+            (Sprite::Dirt_000_110_010, 51),
+            (Sprite::Dirt_110_111_010, 52),
+            (Sprite::Dirt_000_111_011, 53),
+            (Sprite::Dirt_000_111_110, 54),
+            (Sprite::Dirt_011_111_010, 55),
+            (Sprite::Dirt_000_011_011, 56),
+            (Sprite::Dirt_010_111_111, 57),
+            (Sprite::Dirt_000_111_111, 58),
+            (Sprite::Dirt_000_110_110, 59),
+            // Dirt Row 2
+            (Sprite::Dirt_010_010_010, 60),
+            (Sprite::Dirt_010_011_010, 61),
+            (Sprite::Dirt_010_111_010, 62),
+            (Sprite::Dirt_010_110_010, 63),
+            (Sprite::Dirt_010_011_011, 64),
+            (Sprite::Dirt_011_111_111, 65),
+            (Sprite::Dirt_110_111_111, 66),
+            (Sprite::Dirt_010_110_110, 67),
+            (Sprite::Dirt_011_011_011, 68),
+            (Sprite::Dirt_011_111_110, 69),
+            (Sprite::Dirt_000_000_000, 70),
+            (Sprite::Dirt_110_111_110, 71),
+            // Dirt Row 3
+            (Sprite::Dirt_010_010_000, 72),
+            (Sprite::Dirt_010_011_000, 73),
+            (Sprite::Dirt_010_111_000, 74),
+            (Sprite::Dirt_010_110_000, 75),
+            (Sprite::Dirt_011_011_010, 76),
+            (Sprite::Dirt_111_111_011, 77),
+            (Sprite::Dirt_111_111_110, 78),
+            (Sprite::Dirt_110_110_010, 79),
+            (Sprite::Dirt_011_111_011, 80),
+            (Sprite::Dirt_111_111_111, 81),
+            (Sprite::Dirt_110_111_011, 82),
+            (Sprite::Dirt_110_110_110, 83),
+            // Dirt Row 4
+            (Sprite::Dirt_000_010_000, 84),
+            (Sprite::Dirt_000_011_000, 85),
+            (Sprite::Dirt_000_111_000, 86),
+            (Sprite::Dirt_000_110_000, 87),
+            (Sprite::Dirt_010_111_110, 88),
+            (Sprite::Dirt_011_111_000, 89),
+            (Sprite::Dirt_110_111_000, 90),
+            (Sprite::Dirt_010_111_011, 91),
+            (Sprite::Dirt_011_011_000, 92),
+            (Sprite::Dirt_111_111_000, 93),
+            (Sprite::Dirt_111_111_010, 94),
+            (Sprite::Dirt_110_110_000, 95),
+            // Water
+            (Sprite::Water_0, 96),
+            (Sprite::Water_1, 97),
+            (Sprite::Water_2, 98),
+            (Sprite::Water_3, 99),
+            // Blank
+            (Sprite::Blank, 102),
         ]),
     };
 
@@ -152,7 +363,7 @@ pub fn setup_tilemap(mut commands: Commands, asset_server: Res<AssetServer>) {
                 .spawn()
                 .insert_bundle(TileBundle {
                     position: tile_position,
-                    texture: TileTexture(0),
+                    texture: TileTexture(102), // 102 is blank
                     tilemap_id: TilemapId(tilemap_entity),
                     ..default()
                 })
@@ -169,10 +380,7 @@ pub fn setup_tilemap(mut commands: Commands, asset_server: Res<AssetServer>) {
         x: TILE_SIZE as f32,
         y: TILE_SIZE as f32,
     };
-    let image_handle: Handle<Image> = asset_server.load("sprites/basic_sprites.png");
-    // let image_handle: Handle<Image> = asset_server.load(
-    //     "sprites/Sprout Lands - Sprites - Basic pack/Tilesets/ground tiles/old tiles/Grass.png",
-    // );
+    let image_handle: Handle<Image> = asset_server.load("sprites/all_sprites.png");
     let tilemap_texture = TilemapTexture::Single(image_handle);
 
     commands
@@ -277,13 +485,13 @@ pub fn update_tilemap(
             tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Blank];
         }
         for (entity, tile_position, mut tile_texture_index) in grass_tiles_query.iter_mut() {
-            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Grass];
+            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Grass_111_111_111];
         }
         for (entity, tile_position, mut tile_texture_index) in dirt_tiles_query.iter_mut() {
-            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Dirt];
+            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Dirt_111_111_111];
         }
         for (entity, tile_position, mut tile_texture_index) in water_tiles_query.iter_mut() {
-            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Water];
+            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Water_0];
         }
     }
 }
