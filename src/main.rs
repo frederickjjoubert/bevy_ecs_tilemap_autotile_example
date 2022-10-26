@@ -29,17 +29,22 @@ fn main() {
         .add_event::<UpdateTilemapEvent>()
         .add_startup_system(setup_camera)
         .add_startup_system(setup_mouse)
+        .add_startup_system(setup_rules.label(Setup::Rules))
+        .add_startup_system(setup_active_rules.label(Setup::ActiveRules))
         .add_startup_system(setup_sprites.label(Setup::Sprites))
         .add_startup_system(setup_tilemap.label(Setup::Tilemap))
         .add_startup_system(
             setup_game
                 .label(Setup::Game)
+                .after(Setup::Rules)
+                .after(Setup::ActiveRules)
                 .after(Setup::Sprites)
                 .after(Setup::Tilemap),
         )
         .add_system(update_selection)
         .add_system(update_mouse)
         .add_system(place_tile)
+        .add_system(update_active_rules)
         .add_system(update_tilemap)
         .run();
 }
@@ -60,6 +65,8 @@ pub struct UpdateTilemapEvent {}
 // === Enums ===
 #[derive(Debug, Clone, PartialEq, Eq, Hash, SystemLabel)]
 enum Setup {
+    Rules,
+    ActiveRules,
     Sprites,
     Tilemap,
     Game,
@@ -187,7 +194,7 @@ pub enum SpriteType {
     Water,
 }
 
-#[derive(Debug)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum Slot {
     Empty,
     Filled { sprite_type: SpriteType },
@@ -195,11 +202,13 @@ pub enum Slot {
 }
 
 // === Struts ===
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Rule {
     pub nw_slot: Slot,
     pub n_slow: Slot,
     pub ne_slot: Slot,
     pub w_slot: Slot,
+    pub c_slot: Slot,
     pub e_slot: Slot,
     pub sw_slot: Slot,
     pub s_slot: Slot,
@@ -224,6 +233,10 @@ pub struct Sprites {
 
 pub struct Rules {
     pub rules: HashMap<SpriteType, Vec<(Rule, Sprite)>>,
+}
+
+pub struct ActiveRules {
+    pub active_rules: HashMap<TilePos, Rule>,
 }
 
 // === Startup Systems ===
@@ -384,6 +397,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Filled {
@@ -400,6 +416,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -420,6 +439,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -438,6 +460,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Empty,
@@ -462,6 +487,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -480,6 +508,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -502,6 +533,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -530,6 +564,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -548,6 +585,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -570,6 +610,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -596,6 +639,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -620,6 +666,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
@@ -641,6 +690,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Filled {
@@ -659,6 +711,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -679,6 +734,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -703,6 +761,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Filled {
@@ -721,6 +782,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -745,6 +809,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -775,6 +842,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -801,6 +871,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
@@ -823,6 +896,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -847,6 +923,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -877,6 +956,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -900,6 +982,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Empty,
@@ -916,6 +1001,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -934,6 +1022,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -956,6 +1047,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Empty,
@@ -974,6 +1068,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -998,6 +1095,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -1028,6 +1128,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1054,6 +1157,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Filled {
@@ -1074,6 +1180,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -1104,6 +1213,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1132,6 +1244,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1158,6 +1273,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
@@ -1177,6 +1295,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Empty,
@@ -1191,6 +1312,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1207,6 +1331,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -1227,6 +1354,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Empty,
@@ -1243,6 +1373,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -1271,6 +1404,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1293,6 +1429,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1311,6 +1450,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -1337,6 +1479,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1359,6 +1504,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -1385,6 +1533,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1409,6 +1560,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Empty,
@@ -1421,6 +1575,13 @@ pub fn setup_rules(mut commands: Commands) {
         )]),
     };
     commands.insert_resource(rules);
+}
+
+pub fn setup_active_rules(mut commands: Commands) {
+    let active_rules = ActiveRules {
+        active_rules: HashMap::new(),
+    };
+    commands.insert_resource(active_rules);
 }
 
 pub fn setup_tilemap(mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -1509,7 +1670,6 @@ pub fn place_tile(
             if let Some(tile_position) =
                 TilePos::from_world_pos(&cursor_in_map_pos, map_size, grid_size, map_type)
             {
-                // My code
                 if let Some(tile_entity) = tile_storage.get(&tile_position) {
                     commands.entity(tile_entity).remove::<GrassTile>();
                     commands.entity(tile_entity).remove::<DirtTile>();
@@ -1535,34 +1695,30 @@ pub fn place_tile(
     }
 }
 
-pub fn update_tilemap(
+pub fn update_active_rules(
     mut update_tilemap_event_reader: EventReader<UpdateTilemapEvent>,
-    mut tilemap_query: Query<(&TilemapSize, &TileStorage, &TilemapType)>,
-    mut blank_tiles_query: Query<
-        (Entity, &TilePos, &mut TileTexture),
-        (Without<GrassTile>, Without<DirtTile>, Without<WaterTile>),
-    >,
-    mut grass_tiles_query: Query<
-        (Entity, &TilePos, &mut TileTexture),
+    grass_tiles_query: Query<
+        (Entity, &TilePos),
         (With<GrassTile>, Without<DirtTile>, Without<WaterTile>),
     >,
-    mut dirt_tiles_query: Query<
-        (Entity, &TilePos, &mut TileTexture),
+    dirt_tiles_query: Query<
+        (Entity, &TilePos),
         (With<DirtTile>, Without<GrassTile>, Without<WaterTile>),
     >,
-    mut water_tiles_query: Query<
-        (Entity, &TilePos, &mut TileTexture),
+    water_tiles_query: Query<
+        (Entity, &TilePos),
         (With<WaterTile>, Without<GrassTile>, Without<DirtTile>),
     >,
-    sprites: Res<Sprites>,
+    mut tilemap_query: Query<(&TileStorage, &TilemapType)>,
+    mut active_rules: ResMut<ActiveRules>,
 ) {
-    // Perform auto tiling based on neighbors and rules
     for _ in update_tilemap_event_reader.iter() {
-        for (entity, tile_position, mut tile_texture_index) in blank_tiles_query.iter_mut() {
-            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Blank];
-        }
-        for (entity, tile_position, mut tile_texture_index) in grass_tiles_query.iter_mut() {
-            if let Ok((tilemap_size, tile_storage, tilemap_type)) = tilemap_query.get_single_mut() {
+        if let Ok((tile_storage, tilemap_type)) = tilemap_query.get_single_mut() {
+            // Clear Previous Active Rules
+            active_rules.active_rules.clear();
+
+            // Grass Tiles
+            for (entity, tile_position) in grass_tiles_query.iter() {
                 // let neighbor_positions = get_neighboring_pos(tile_position, tilemap_size, tilemap_type);
                 // 1. Create current rule for tile neighbors.
                 let neighbors = get_tile_neighbors(tile_position, tile_storage, tilemap_type);
@@ -1658,6 +1814,11 @@ pub fn update_tilemap(
                 } else {
                     west_slot = Slot::Empty
                 }
+
+                // C
+                let center_slot = Slot::Filled {
+                    sprite_type: SpriteType::Grass,
+                };
 
                 // E
                 let east_slot: Slot;
@@ -1756,22 +1917,53 @@ pub fn update_tilemap(
                     n_slow: north_slot,
                     ne_slot: north_east_slot,
                     w_slot: west_slot,
+                    c_slot: center_slot,
                     e_slot: east_slot,
                     sw_slot: south_west_slot,
                     s_slot: south_slot,
                     se_slow: south_east_slot,
                 };
 
-                // 2. Find matching rule and resolve Sprite
+                active_rules
+                    .active_rules
+                    .insert(*tile_position, current_rule);
             }
+        }
+    }
+}
 
-            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Grass_111_111_111];
-        }
-        for (entity, tile_position, mut tile_texture_index) in dirt_tiles_query.iter_mut() {
-            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Dirt_111_111_111];
-        }
-        for (entity, tile_position, mut tile_texture_index) in water_tiles_query.iter_mut() {
-            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Water_0];
+pub fn update_tilemap(
+    mut grass_tiles_query: Query<
+        (Entity, &TilePos, &mut TileTexture),
+        (With<GrassTile>, Without<DirtTile>, Without<WaterTile>),
+    >,
+    mut dirt_tiles_query: Query<
+        (Entity, &TilePos, &mut TileTexture),
+        (With<DirtTile>, Without<GrassTile>, Without<WaterTile>),
+    >,
+    mut water_tiles_query: Query<
+        (Entity, &TilePos, &mut TileTexture),
+        (With<WaterTile>, Without<GrassTile>, Without<DirtTile>),
+    >,
+    sprites: Res<Sprites>,
+    active_rules: Res<ActiveRules>,
+    rules: Res<Rules>,
+) {
+    // Perform auto tiling based on neighbors and rules
+    if active_rules.is_changed() {
+        let possible_rules = rules.rules[&SpriteType::Grass].clone();
+        for (entity, tile_position, mut tile_texture) in grass_tiles_query.iter_mut() {
+            if active_rules.active_rules.contains_key(tile_position) {
+                let active_rule = active_rules.active_rules[tile_position];
+                let mut new_sprite = Sprite::Blank;
+                for (rule, sprite) in possible_rules.iter() {
+                    if active_rule == *rule {
+                        new_sprite = sprite.clone();
+                        break;
+                    }
+                }
+                tile_texture.0 = sprites.sprite_lookup_table[&new_sprite];
+            }
         }
     }
 }
