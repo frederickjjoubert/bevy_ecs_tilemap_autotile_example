@@ -179,12 +179,31 @@ pub enum Sprite {
     Water_3,
 }
 
-#[derive(Debug)]
-pub enum Selection {
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum SpriteType {
     Blank,
     Grass,
     Dirt,
     Water,
+}
+
+#[derive(Debug)]
+pub enum Slot {
+    Empty,
+    Filled { sprite_type: SpriteType },
+    Any,
+}
+
+// === Struts ===
+pub struct Rule {
+    pub nw_slot: Slot,
+    pub n_slow: Slot,
+    pub ne_slot: Slot,
+    pub w_slot: Slot,
+    pub e_slot: Slot,
+    pub sw_slot: Slot,
+    pub s_slot: Slot,
+    pub se_slow: Slot,
 }
 
 // === Resources ===
@@ -196,11 +215,15 @@ pub struct Mouse {
 }
 
 pub struct GameState {
-    pub selection: Selection,
+    pub selection: SpriteType,
 }
 
 pub struct Sprites {
     pub sprite_lookup_table: HashMap<Sprite, u32>,
+}
+
+pub struct Rules {
+    pub rules: HashMap<SpriteType, Vec<(Rule, Sprite)>>,
 }
 
 // === Startup Systems ===
@@ -347,6 +370,1059 @@ pub fn setup_sprites(mut commands: Commands) {
     commands.insert_resource(sprites);
 }
 
+pub fn setup_rules(mut commands: Commands) {
+    let rules = Rules {
+        rules: HashMap::from([(
+            SpriteType::Grass,
+            Vec::from([
+                // Basic Rules
+                // Row 1
+                // 0
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_000_010_010,
+                ),
+                // 1
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_000_011_010,
+                ),
+                // 2
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_000_111_010,
+                ),
+                // 3
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_000_110_010,
+                ),
+                // 4
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_110_111_010,
+                ),
+                // 5
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_000_111_011,
+                ),
+                // 6
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_000_111_110,
+                ),
+                // 7
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_011_111_010,
+                ),
+                // 8
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_000_011_011,
+                ),
+                // 9
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_010_111_111,
+                ),
+                // 10
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_000_111_111,
+                ),
+                // 11
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_000_110_110,
+                ),
+                // Row 2
+                // 12
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_010_010_010,
+                ),
+                // 13
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_010_011_010,
+                ),
+                // 14
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_010_111_010,
+                ),
+                // 15
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_010_110_010,
+                ),
+                // 16
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_010_011_011,
+                ),
+                // 17
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_011_111_111,
+                ),
+                // 18
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_110_111_111,
+                ),
+                // 19
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_010_110_110,
+                ),
+                // 20
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_011_011_011,
+                ),
+                // 21
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_011_111_110,
+                ),
+                // 22
+                // No Rule for blank tile.
+                // 23
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_110_111_110,
+                ),
+                // Row 3
+                // 24
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_010_010_000,
+                ),
+                // 25
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_010_011_000,
+                ),
+                // 26
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_010_111_000,
+                ),
+                // 27
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_010_110_000,
+                ),
+                // 28
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_011_011_010,
+                ),
+                // 29
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_111_111_011,
+                ),
+                // 30
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_111_111_110,
+                ),
+                // 31
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_110_110_010,
+                ),
+                // 32
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_011_111_011,
+                ),
+                // 33
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_111_111_111,
+                ),
+                // 34
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_110_111_011,
+                ),
+                // 35
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_110_110_110,
+                ),
+                // Row 4
+                // 36
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_000_010_000,
+                ),
+                // 37
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_000_011_000,
+                ),
+                // 38
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_000_111_000,
+                ),
+                // 39
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Empty,
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_000_110_000,
+                ),
+                // 40
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_010_111_110,
+                ),
+                // 41
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_011_111_000,
+                ),
+                // 42
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_110_111_000,
+                ),
+                // 43
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                    },
+                    Sprite::Grass_010_111_011,
+                ),
+                // 44
+                (
+                    Rule {
+                        nw_slot: Slot::Empty,
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Empty,
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_011_011_000,
+                ),
+                // 45
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_111_111_000,
+                ),
+                // 46
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_111_111_010,
+                ),
+                // 47
+                (
+                    Rule {
+                        nw_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        n_slow: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        ne_slot: Slot::Empty,
+                        w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        e_slot: Slot::Empty,
+                        sw_slot: Slot::Empty,
+                        s_slot: Slot::Empty,
+                        se_slow: Slot::Empty,
+                    },
+                    Sprite::Grass_110_110_000,
+                ),
+                // Custom Rules
+            ]),
+        )]),
+    };
+    commands.insert_resource(rules);
+}
+
 pub fn setup_tilemap(mut commands: Commands, asset_server: Res<AssetServer>) {
     let tilemap_size = TilemapSize {
         x: MAP_WIDTH as u32,
@@ -398,7 +1474,7 @@ pub fn setup_tilemap(mut commands: Commands, asset_server: Res<AssetServer>) {
 
 pub fn setup_game(mut commands: Commands) {
     let game_state = GameState {
-        selection: Selection::Grass,
+        selection: SpriteType::Grass,
     };
     commands.insert_resource(game_state);
 }
@@ -439,13 +1515,13 @@ pub fn place_tile(
                     commands.entity(tile_entity).remove::<DirtTile>();
                     commands.entity(tile_entity).remove::<WaterTile>();
                     match game_state.selection {
-                        Selection::Grass => {
+                        SpriteType::Grass => {
                             commands.entity(tile_entity).insert(GrassTile {});
                         }
-                        Selection::Dirt => {
+                        SpriteType::Dirt => {
                             commands.entity(tile_entity).insert(DirtTile {});
                         }
-                        Selection::Water => {
+                        SpriteType::Water => {
                             commands.entity(tile_entity).insert(WaterTile {});
                         }
                         _ => {
@@ -461,6 +1537,7 @@ pub fn place_tile(
 
 pub fn update_tilemap(
     mut update_tilemap_event_reader: EventReader<UpdateTilemapEvent>,
+    mut tilemap_query: Query<(&TilemapSize, &TileStorage, &TilemapType)>,
     mut blank_tiles_query: Query<
         (Entity, &TilePos, &mut TileTexture),
         (Without<GrassTile>, Without<DirtTile>, Without<WaterTile>),
@@ -485,6 +1562,209 @@ pub fn update_tilemap(
             tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Blank];
         }
         for (entity, tile_position, mut tile_texture_index) in grass_tiles_query.iter_mut() {
+            if let Ok((tilemap_size, tile_storage, tilemap_type)) = tilemap_query.get_single_mut() {
+                // let neighbor_positions = get_neighboring_pos(tile_position, tilemap_size, tilemap_type);
+                // 1. Create current rule for tile neighbors.
+                let neighbors = get_tile_neighbors(tile_position, tile_storage, tilemap_type);
+
+                // NW
+                let north_west_slot: Slot;
+                if let Some(nw_neighbor) = neighbors.north_west {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(nw_neighbor) {
+                        north_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(nw_neighbor) {
+                        north_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(nw_neighbor) {
+                        north_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        north_west_slot = Slot::Empty
+                    }
+                } else {
+                    north_west_slot = Slot::Empty
+                }
+
+                // N
+                let north_slot: Slot;
+                if let Some(north_neighbor_entity) = neighbors.north {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(north_neighbor_entity) {
+                        north_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(north_neighbor_entity) {
+                        north_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(north_neighbor_entity) {
+                        north_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        north_slot = Slot::Empty
+                    }
+                } else {
+                    north_slot = Slot::Empty
+                }
+
+                // NE
+                let north_east_slot: Slot;
+                if let Some(north_east_neighbor_entity) = neighbors.north_east {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(north_east_neighbor_entity) {
+                        north_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(north_east_neighbor_entity) {
+                        north_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(north_east_neighbor_entity) {
+                        north_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        north_east_slot = Slot::Empty
+                    }
+                } else {
+                    north_east_slot = Slot::Empty
+                }
+
+                // W
+                let west_slot: Slot;
+                if let Some(west_neighbor_entity) = neighbors.west {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(west_neighbor_entity) {
+                        west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(west_neighbor_entity) {
+                        west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(west_neighbor_entity) {
+                        west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        west_slot = Slot::Empty
+                    }
+                } else {
+                    west_slot = Slot::Empty
+                }
+
+                // E
+                let east_slot: Slot;
+                if let Some(east_neighbor_entity) = neighbors.east {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(east_neighbor_entity) {
+                        east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(east_neighbor_entity) {
+                        east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(east_neighbor_entity) {
+                        east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        east_slot = Slot::Empty
+                    }
+                } else {
+                    east_slot = Slot::Empty
+                }
+
+                // SW
+                let south_west_slot: Slot;
+                if let Some(south_west_neighbor_entity) = neighbors.south_west {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(south_west_neighbor_entity) {
+                        south_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(south_west_neighbor_entity) {
+                        south_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(south_west_neighbor_entity) {
+                        south_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        south_west_slot = Slot::Empty
+                    }
+                } else {
+                    south_west_slot = Slot::Empty
+                }
+
+                // S
+                let south_slot: Slot;
+                if let Some(south_neighbor_entity) = neighbors.south {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(south_neighbor_entity) {
+                        south_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(south_neighbor_entity) {
+                        south_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(south_neighbor_entity) {
+                        south_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        south_slot = Slot::Empty
+                    }
+                } else {
+                    south_slot = Slot::Empty
+                }
+
+                // SE
+                let south_east_slot: Slot;
+                if let Some(south_east_neighbor_entity) = neighbors.south_east {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(south_east_neighbor_entity) {
+                        south_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(south_east_neighbor_entity) {
+                        south_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(south_east_neighbor_entity) {
+                        south_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        south_east_slot = Slot::Empty
+                    }
+                } else {
+                    south_east_slot = Slot::Empty
+                }
+
+                let current_rule = Rule {
+                    nw_slot: north_west_slot,
+                    n_slow: north_slot,
+                    ne_slot: north_east_slot,
+                    w_slot: west_slot,
+                    e_slot: east_slot,
+                    sw_slot: south_west_slot,
+                    s_slot: south_slot,
+                    se_slow: south_east_slot,
+                };
+
+                // 2. Find matching rule and resolve Sprite
+            }
+
             tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Grass_111_111_111];
         }
         for (entity, tile_position, mut tile_texture_index) in dirt_tiles_query.iter_mut() {
@@ -498,16 +1778,16 @@ pub fn update_tilemap(
 
 pub fn update_selection(keyboard: Res<Input<KeyCode>>, mut game_state: ResMut<GameState>) {
     if keyboard.just_pressed(KeyCode::Key1) {
-        game_state.selection = Selection::Blank;
+        game_state.selection = SpriteType::Blank;
         println!("Selection Updated: {:?}", game_state.selection);
     } else if keyboard.just_pressed(KeyCode::Key2) {
-        game_state.selection = Selection::Grass;
+        game_state.selection = SpriteType::Grass;
         println!("Selection Updated: {:?}", game_state.selection);
     } else if keyboard.just_pressed(KeyCode::Key3) {
-        game_state.selection = Selection::Dirt;
+        game_state.selection = SpriteType::Dirt;
         println!("Selection Updated: {:?}", game_state.selection);
     } else if keyboard.just_pressed(KeyCode::Key4) {
-        game_state.selection = Selection::Water;
+        game_state.selection = SpriteType::Water;
         println!("Selection Updated: {:?}", game_state.selection);
     }
 }
