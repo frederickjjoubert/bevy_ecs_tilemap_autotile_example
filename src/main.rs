@@ -29,17 +29,22 @@ fn main() {
         .add_event::<UpdateTilemapEvent>()
         .add_startup_system(setup_camera)
         .add_startup_system(setup_mouse)
+        .add_startup_system(setup_rules.label(Setup::Rules))
+        .add_startup_system(setup_active_rules.label(Setup::ActiveRules))
         .add_startup_system(setup_sprites.label(Setup::Sprites))
         .add_startup_system(setup_tilemap.label(Setup::Tilemap))
         .add_startup_system(
             setup_game
                 .label(Setup::Game)
+                .after(Setup::Rules)
+                .after(Setup::ActiveRules)
                 .after(Setup::Sprites)
                 .after(Setup::Tilemap),
         )
         .add_system(update_selection)
         .add_system(update_mouse)
         .add_system(place_tile)
+        .add_system(update_active_rules)
         .add_system(update_tilemap)
         .run();
 }
@@ -54,17 +59,14 @@ pub struct DirtTile {}
 #[derive(Component, Debug)]
 pub struct WaterTile {}
 
-#[derive(Component, Debug)]
-pub struct TileType {
-    sprite_type: SpriteType,
-}
-
 // === Events ===
 pub struct UpdateTilemapEvent {}
 
 // === Enums ===
 #[derive(Debug, Clone, PartialEq, Eq, Hash, SystemLabel)]
 enum Setup {
+    Rules,
+    ActiveRules,
     Sprites,
     Tilemap,
     Game,
@@ -192,7 +194,7 @@ pub enum SpriteType {
     Water,
 }
 
-#[derive(Debug)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum Slot {
     Empty,
     Filled { sprite_type: SpriteType },
@@ -200,6 +202,7 @@ pub enum Slot {
 }
 
 // === Struts ===
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct Rule {
     pub nw_slot: Slot,
     pub n_slow: Slot,
@@ -1601,9 +1604,6 @@ pub fn setup_tilemap(mut commands: Commands, asset_server: Res<AssetServer>) {
                     tilemap_id: TilemapId(tilemap_entity),
                     ..default()
                 })
-                .insert(TileType {
-                    sprite_type: SpriteType::Blank,
-                })
                 .id();
             tile_storage.set(&tile_position, tile_entity);
         }
@@ -1653,7 +1653,6 @@ pub fn place_tile(
         &TileStorage,
         &Transform,
     )>,
-    tiles_query: Query<&mut TileType>,
 ) {
     if mouse.holding_lmb {
         for (map_size, grid_size, map_type, tile_storage, map_transform) in tilemap_query.iter() {
@@ -1675,30 +1674,18 @@ pub fn place_tile(
                     commands.entity(tile_entity).remove::<GrassTile>();
                     commands.entity(tile_entity).remove::<DirtTile>();
                     commands.entity(tile_entity).remove::<WaterTile>();
-                    commands.entity(tile_entity).remove::<TileType>();
                     match game_state.selection {
-                        SpriteType::Blank => {
-                            commands.entity(tile_entity).insert(TileType {
-                                sprite_type: SpriteType::Blank,
-                            });
-                        }
                         SpriteType::Grass => {
                             commands.entity(tile_entity).insert(GrassTile {});
-                            commands.entity(tile_entity).insert(TileType {
-                                sprite_type: SpriteType::Grass,
-                            });
                         }
                         SpriteType::Dirt => {
                             commands.entity(tile_entity).insert(DirtTile {});
-                            commands.entity(tile_entity).insert(TileType {
-                                sprite_type: SpriteType::Dirt,
-                            });
                         }
                         SpriteType::Water => {
                             commands.entity(tile_entity).insert(WaterTile {});
-                            commands.entity(tile_entity).insert(TileType {
-                                sprite_type: SpriteType::Water,
-                            });
+                        }
+                        _ => {
+                            // Do Nothing
                         }
                     }
                     update_tilemap_event_writer.send(UpdateTilemapEvent {});
@@ -1710,230 +1697,273 @@ pub fn place_tile(
 
 pub fn update_active_rules(
     mut update_tilemap_event_reader: EventReader<UpdateTilemapEvent>,
-    mut tiles_query: Query<(Entity, &TileType, &TilePos, &mut TileTexture)>,
-    mut tilemap_query: Query<(&TilemapSize, &TileStorage, &TilemapType)>,
+    grass_tiles_query: Query<
+        (Entity, &TilePos),
+        (With<GrassTile>, Without<DirtTile>, Without<WaterTile>),
+    >,
+    dirt_tiles_query: Query<
+        (Entity, &TilePos),
+        (With<DirtTile>, Without<GrassTile>, Without<WaterTile>),
+    >,
+    water_tiles_query: Query<
+        (Entity, &TilePos),
+        (With<WaterTile>, Without<GrassTile>, Without<DirtTile>),
+    >,
+    mut tilemap_query: Query<(&TileStorage, &TilemapType)>,
+    mut active_rules: ResMut<ActiveRules>,
 ) {
     for _ in update_tilemap_event_reader.iter() {
-        if let Ok((tilemap_size, tile_storage, tilemap_type)) = tilemap_query.get_single_mut() {
-            for (entity, tile_type, tile_position, mut tile_texture) in tiles_query {}
+        if let Ok((tile_storage, tilemap_type)) = tilemap_query.get_single_mut() {
+            // Clear Previous Active Rules
+            active_rules.active_rules.clear();
 
-            // let neighbor_positions = get_neighboring_pos(tile_position, tilemap_size, tilemap_type);
-            // 1. Create current rule for tile neighbors.
-            let neighbors = get_tile_neighbors(tile_position, tile_storage, tilemap_type);
+            // Grass Tiles
+            for (entity, tile_position) in grass_tiles_query.iter() {
+                // let neighbor_positions = get_neighboring_pos(tile_position, tilemap_size, tilemap_type);
+                // 1. Create current rule for tile neighbors.
+                let neighbors = get_tile_neighbors(tile_position, tile_storage, tilemap_type);
 
-            // NW
-            let north_west_slot: Slot;
-            if let Some(nw_neighbor) = neighbors.north_west {
-                // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                if grass_tiles_query.contains(nw_neighbor) {
-                    north_west_slot = Slot::Filled {
-                        sprite_type: SpriteType::Grass,
-                    }
-                } else if dirt_tiles_query.contains(nw_neighbor) {
-                    north_west_slot = Slot::Filled {
-                        sprite_type: SpriteType::Dirt,
-                    }
-                } else if water_tiles_query.contains(nw_neighbor) {
-                    north_west_slot = Slot::Filled {
-                        sprite_type: SpriteType::Water,
+                // NW
+                let north_west_slot: Slot;
+                if let Some(nw_neighbor) = neighbors.north_west {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(nw_neighbor) {
+                        north_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(nw_neighbor) {
+                        north_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(nw_neighbor) {
+                        north_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        north_west_slot = Slot::Empty
                     }
                 } else {
                     north_west_slot = Slot::Empty
                 }
-            } else {
-                north_west_slot = Slot::Empty
-            }
 
-            // N
-            let north_slot: Slot;
-            if let Some(north_neighbor_entity) = neighbors.north {
-                // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                if grass_tiles_query.contains(north_neighbor_entity) {
-                    north_slot = Slot::Filled {
-                        sprite_type: SpriteType::Grass,
-                    }
-                } else if dirt_tiles_query.contains(north_neighbor_entity) {
-                    north_slot = Slot::Filled {
-                        sprite_type: SpriteType::Dirt,
-                    }
-                } else if water_tiles_query.contains(north_neighbor_entity) {
-                    north_slot = Slot::Filled {
-                        sprite_type: SpriteType::Water,
+                // N
+                let north_slot: Slot;
+                if let Some(north_neighbor_entity) = neighbors.north {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(north_neighbor_entity) {
+                        north_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(north_neighbor_entity) {
+                        north_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(north_neighbor_entity) {
+                        north_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        north_slot = Slot::Empty
                     }
                 } else {
                     north_slot = Slot::Empty
                 }
-            } else {
-                north_slot = Slot::Empty
-            }
 
-            // NE
-            let north_east_slot: Slot;
-            if let Some(north_east_neighbor_entity) = neighbors.north_east {
-                // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                if grass_tiles_query.contains(north_east_neighbor_entity) {
-                    north_east_slot = Slot::Filled {
-                        sprite_type: SpriteType::Grass,
-                    }
-                } else if dirt_tiles_query.contains(north_east_neighbor_entity) {
-                    north_east_slot = Slot::Filled {
-                        sprite_type: SpriteType::Dirt,
-                    }
-                } else if water_tiles_query.contains(north_east_neighbor_entity) {
-                    north_east_slot = Slot::Filled {
-                        sprite_type: SpriteType::Water,
+                // NE
+                let north_east_slot: Slot;
+                if let Some(north_east_neighbor_entity) = neighbors.north_east {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(north_east_neighbor_entity) {
+                        north_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(north_east_neighbor_entity) {
+                        north_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(north_east_neighbor_entity) {
+                        north_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        north_east_slot = Slot::Empty
                     }
                 } else {
                     north_east_slot = Slot::Empty
                 }
-            } else {
-                north_east_slot = Slot::Empty
-            }
 
-            // W
-            let west_slot: Slot;
-            if let Some(west_neighbor_entity) = neighbors.west {
-                // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                if grass_tiles_query.contains(west_neighbor_entity) {
-                    west_slot = Slot::Filled {
-                        sprite_type: SpriteType::Grass,
-                    }
-                } else if dirt_tiles_query.contains(west_neighbor_entity) {
-                    west_slot = Slot::Filled {
-                        sprite_type: SpriteType::Dirt,
-                    }
-                } else if water_tiles_query.contains(west_neighbor_entity) {
-                    west_slot = Slot::Filled {
-                        sprite_type: SpriteType::Water,
+                // W
+                let west_slot: Slot;
+                if let Some(west_neighbor_entity) = neighbors.west {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(west_neighbor_entity) {
+                        west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(west_neighbor_entity) {
+                        west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(west_neighbor_entity) {
+                        west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        west_slot = Slot::Empty
                     }
                 } else {
                     west_slot = Slot::Empty
                 }
-            } else {
-                west_slot = Slot::Empty
-            }
 
-            // E
-            let east_slot: Slot;
-            if let Some(east_neighbor_entity) = neighbors.east {
-                // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                if grass_tiles_query.contains(east_neighbor_entity) {
-                    east_slot = Slot::Filled {
-                        sprite_type: SpriteType::Grass,
-                    }
-                } else if dirt_tiles_query.contains(east_neighbor_entity) {
-                    east_slot = Slot::Filled {
-                        sprite_type: SpriteType::Dirt,
-                    }
-                } else if water_tiles_query.contains(east_neighbor_entity) {
-                    east_slot = Slot::Filled {
-                        sprite_type: SpriteType::Water,
+                // C
+                let center_slot = Slot::Filled {
+                    sprite_type: SpriteType::Grass,
+                };
+
+                // E
+                let east_slot: Slot;
+                if let Some(east_neighbor_entity) = neighbors.east {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(east_neighbor_entity) {
+                        east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(east_neighbor_entity) {
+                        east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(east_neighbor_entity) {
+                        east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        east_slot = Slot::Empty
                     }
                 } else {
                     east_slot = Slot::Empty
                 }
-            } else {
-                east_slot = Slot::Empty
-            }
 
-            // SW
-            let south_west_slot: Slot;
-            if let Some(south_west_neighbor_entity) = neighbors.south_west {
-                // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                if grass_tiles_query.contains(south_west_neighbor_entity) {
-                    south_west_slot = Slot::Filled {
-                        sprite_type: SpriteType::Grass,
-                    }
-                } else if dirt_tiles_query.contains(south_west_neighbor_entity) {
-                    south_west_slot = Slot::Filled {
-                        sprite_type: SpriteType::Dirt,
-                    }
-                } else if water_tiles_query.contains(south_west_neighbor_entity) {
-                    south_west_slot = Slot::Filled {
-                        sprite_type: SpriteType::Water,
+                // SW
+                let south_west_slot: Slot;
+                if let Some(south_west_neighbor_entity) = neighbors.south_west {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(south_west_neighbor_entity) {
+                        south_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(south_west_neighbor_entity) {
+                        south_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(south_west_neighbor_entity) {
+                        south_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        south_west_slot = Slot::Empty
                     }
                 } else {
                     south_west_slot = Slot::Empty
                 }
-            } else {
-                south_west_slot = Slot::Empty
-            }
 
-            // S
-            let south_slot: Slot;
-            if let Some(south_neighbor_entity) = neighbors.south {
-                // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                if grass_tiles_query.contains(south_neighbor_entity) {
-                    south_slot = Slot::Filled {
-                        sprite_type: SpriteType::Grass,
-                    }
-                } else if dirt_tiles_query.contains(south_neighbor_entity) {
-                    south_slot = Slot::Filled {
-                        sprite_type: SpriteType::Dirt,
-                    }
-                } else if water_tiles_query.contains(south_neighbor_entity) {
-                    south_slot = Slot::Filled {
-                        sprite_type: SpriteType::Water,
+                // S
+                let south_slot: Slot;
+                if let Some(south_neighbor_entity) = neighbors.south {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(south_neighbor_entity) {
+                        south_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(south_neighbor_entity) {
+                        south_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(south_neighbor_entity) {
+                        south_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        south_slot = Slot::Empty
                     }
                 } else {
                     south_slot = Slot::Empty
                 }
-            } else {
-                south_slot = Slot::Empty
-            }
 
-            // SE
-            let south_east_slot: Slot;
-            if let Some(south_east_neighbor_entity) = neighbors.south_east {
-                // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                if grass_tiles_query.contains(south_east_neighbor_entity) {
-                    south_east_slot = Slot::Filled {
-                        sprite_type: SpriteType::Grass,
-                    }
-                } else if dirt_tiles_query.contains(south_east_neighbor_entity) {
-                    south_east_slot = Slot::Filled {
-                        sprite_type: SpriteType::Dirt,
-                    }
-                } else if water_tiles_query.contains(south_east_neighbor_entity) {
-                    south_east_slot = Slot::Filled {
-                        sprite_type: SpriteType::Water,
+                // SE
+                let south_east_slot: Slot;
+                if let Some(south_east_neighbor_entity) = neighbors.south_east {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(south_east_neighbor_entity) {
+                        south_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(south_east_neighbor_entity) {
+                        south_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(south_east_neighbor_entity) {
+                        south_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        south_east_slot = Slot::Empty
                     }
                 } else {
                     south_east_slot = Slot::Empty
                 }
-            } else {
-                south_east_slot = Slot::Empty
+
+                let current_rule = Rule {
+                    nw_slot: north_west_slot,
+                    n_slow: north_slot,
+                    ne_slot: north_east_slot,
+                    w_slot: west_slot,
+                    c_slot: center_slot,
+                    e_slot: east_slot,
+                    sw_slot: south_west_slot,
+                    s_slot: south_slot,
+                    se_slow: south_east_slot,
+                };
+
+                active_rules
+                    .active_rules
+                    .insert(*tile_position, current_rule);
             }
-
-            let current_rule = Rule {
-                nw_slot: north_west_slot,
-                n_slow: north_slot,
-                ne_slot: north_east_slot,
-                w_slot: west_slot,
-                c_slot: Slot::Empty, // TODO: Add this case in above properly.
-                e_slot: east_slot,
-                sw_slot: south_west_slot,
-                s_slot: south_slot,
-                se_slow: south_east_slot,
-            };
-
-            active_rules.insert(*tile_position, current_rule);
         }
     }
 }
 
 pub fn update_tilemap(
-    mut update_tilemap_event_reader: EventReader<UpdateTilemapEvent>,
-    mut tilemap_query: Query<(&TilemapSize, &TileStorage, &TilemapType)>,
-    mut tiles_query: Query<(Entity, &TilePos, &mut TileTexture)>,
+    mut grass_tiles_query: Query<
+        (Entity, &TilePos, &mut TileTexture),
+        (With<GrassTile>, Without<DirtTile>, Without<WaterTile>),
+    >,
+    mut dirt_tiles_query: Query<
+        (Entity, &TilePos, &mut TileTexture),
+        (With<DirtTile>, Without<GrassTile>, Without<WaterTile>),
+    >,
+    mut water_tiles_query: Query<
+        (Entity, &TilePos, &mut TileTexture),
+        (With<WaterTile>, Without<GrassTile>, Without<DirtTile>),
+    >,
     sprites: Res<Sprites>,
     active_rules: Res<ActiveRules>,
     rules: Res<Rules>,
 ) {
     // Perform auto tiling based on neighbors and rules
-    for _ in update_tilemap_event_reader.iter() {
-        for (entity, tile_position, mut tile_texture) in tiles_query.iter_mut() {
-            let rule = active_rules[*tile_position];
+    if active_rules.is_changed() {
+        let possible_rules = rules.rules[&SpriteType::Grass].clone();
+        for (entity, tile_position, mut tile_texture) in grass_tiles_query.iter_mut() {
+            if active_rules.active_rules.contains_key(tile_position) {
+                let active_rule = active_rules.active_rules[tile_position];
+                let mut new_sprite = Sprite::Blank;
+                for (rule, sprite) in possible_rules.iter() {
+                    if active_rule == *rule {
+                        new_sprite = sprite.clone();
+                        break;
+                    }
+                }
+                tile_texture.0 = sprites.sprite_lookup_table[&new_sprite];
+            }
         }
     }
 }
