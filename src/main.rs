@@ -1,5 +1,6 @@
 #![warn(clippy::all, clippy::pedantic)]
 
+use bevy::input::mouse::{MouseScrollUnit, MouseWheel};
 use bevy::math::Vec4Swizzles;
 use bevy::prelude::*;
 use bevy::render::texture::ImageSettings;
@@ -11,6 +12,11 @@ use std::collections::HashMap;
 pub const MAP_WIDTH: i32 = 64;
 pub const MAP_HEIGHT: i32 = 64;
 pub const TILE_SIZE: i32 = 16;
+
+pub const CAMERA_MIN_ZOOM: f32 = 0.1;
+pub const CAMERA_MAX_ZOOM: f32 = 2.5;
+pub const CAMERA_MOVEMENT_SPEED: f32 = 10.0;
+pub const CAMERA_SCROLL_SPEED: f32 = 0.1;
 
 fn main() {
     App::new()
@@ -41,6 +47,8 @@ fn main() {
                 .after(Setup::Sprites)
                 .after(Setup::Tilemap),
         )
+        .add_system(update_camera_movement)
+        .add_system(update_camera_zoom)
         .add_system(update_selection)
         .add_system(update_mouse)
         .add_system(place_tile)
@@ -1646,6 +1654,7 @@ pub fn place_tile(
     mut update_tilemap_event_writer: EventWriter<UpdateTilemapEvent>,
     game_state: Res<GameState>,
     mouse: Res<Mouse>,
+    mouse_input: Res<Input<MouseButton>>,
     tilemap_query: Query<(
         &TilemapSize,
         &TilemapGridSize,
@@ -1654,7 +1663,8 @@ pub fn place_tile(
         &Transform,
     )>,
 ) {
-    if mouse.holding_lmb {
+    // if mouse.holding_lmb
+    if mouse_input.just_pressed(MouseButton::Left) {
         for (map_size, grid_size, map_type, tile_storage, map_transform) in tilemap_query.iter() {
             // Grab the cursor position from the `Res<CursorPos>`
             let cursor_pos: Vec3 = mouse.world_position;
@@ -1697,18 +1707,9 @@ pub fn place_tile(
 
 pub fn update_active_rules(
     mut update_tilemap_event_reader: EventReader<UpdateTilemapEvent>,
-    grass_tiles_query: Query<
-        (Entity, &TilePos),
-        (With<GrassTile>, Without<DirtTile>, Without<WaterTile>),
-    >,
-    dirt_tiles_query: Query<
-        (Entity, &TilePos),
-        (With<DirtTile>, Without<GrassTile>, Without<WaterTile>),
-    >,
-    water_tiles_query: Query<
-        (Entity, &TilePos),
-        (With<WaterTile>, Without<GrassTile>, Without<DirtTile>),
-    >,
+    grass_tiles_query: Query<&TilePos, (With<GrassTile>, Without<DirtTile>, Without<WaterTile>)>,
+    dirt_tiles_query: Query<&TilePos, (With<DirtTile>, Without<GrassTile>, Without<WaterTile>)>,
+    water_tiles_query: Query<&TilePos, (With<WaterTile>, Without<GrassTile>, Without<DirtTile>)>,
     mut tilemap_query: Query<(&TileStorage, &TilemapType)>,
     mut active_rules: ResMut<ActiveRules>,
 ) {
@@ -1718,19 +1719,20 @@ pub fn update_active_rules(
             active_rules.active_rules.clear();
 
             // Grass Tiles
-            for (entity, tile_position) in grass_tiles_query.iter() {
-                // let neighbor_positions = get_neighboring_pos(tile_position, tilemap_size, tilemap_type);
+            for tile_position in grass_tiles_query.iter() {
                 // 1. Create current rule for tile neighbors.
                 let neighbors = get_tile_neighbors(tile_position, tile_storage, tilemap_type);
-
+                println!("Is this getting called - 0?");
                 // NW
                 let north_west_slot: Slot;
                 if let Some(nw_neighbor) = neighbors.north_west {
+                    println!("Is this getting called - 1?");
                     // Can also change this system to only check for Grass Tiles and resolve others to Any.
                     if grass_tiles_query.contains(nw_neighbor) {
                         north_west_slot = Slot::Filled {
                             sprite_type: SpriteType::Grass,
-                        }
+                        };
+                        println!("Is this getting called - 2?");
                     } else if dirt_tiles_query.contains(nw_neighbor) {
                         north_west_slot = Slot::Filled {
                             sprite_type: SpriteType::Dirt,
@@ -1934,15 +1936,15 @@ pub fn update_active_rules(
 
 pub fn update_tilemap(
     mut grass_tiles_query: Query<
-        (Entity, &TilePos, &mut TileTexture),
+        (&TilePos, &mut TileTexture),
         (With<GrassTile>, Without<DirtTile>, Without<WaterTile>),
     >,
     mut dirt_tiles_query: Query<
-        (Entity, &TilePos, &mut TileTexture),
+        (&TilePos, &mut TileTexture),
         (With<DirtTile>, Without<GrassTile>, Without<WaterTile>),
     >,
     mut water_tiles_query: Query<
-        (Entity, &TilePos, &mut TileTexture),
+        (&TilePos, &mut TileTexture),
         (With<WaterTile>, Without<GrassTile>, Without<DirtTile>),
     >,
     sprites: Res<Sprites>,
@@ -1951,13 +1953,16 @@ pub fn update_tilemap(
 ) {
     // Perform auto tiling based on neighbors and rules
     if active_rules.is_changed() {
+        // println!("active_rules: {:?}", active_rules.active_rules);
         let possible_rules = rules.rules[&SpriteType::Grass].clone();
-        for (entity, tile_position, mut tile_texture) in grass_tiles_query.iter_mut() {
+        for (tile_position, mut tile_texture) in grass_tiles_query.iter_mut() {
             if active_rules.active_rules.contains_key(tile_position) {
                 let active_rule = active_rules.active_rules[tile_position];
                 let mut new_sprite = Sprite::Blank;
                 for (rule, sprite) in possible_rules.iter() {
                     if active_rule == *rule {
+                        // println!("a_rule: {:?}", active_rule);
+                        // println!("c_rule: {:?}", rule);
                         new_sprite = sprite.clone();
                         break;
                     }
@@ -2005,6 +2010,94 @@ pub fn update_mouse(
         mouse.holding_lmb = true;
     } else if mouse_input.just_released(MouseButton::Left) {
         mouse.holding_lmb = false;
+    }
+}
+
+pub fn update_camera_movement(
+    keyboard: Res<Input<KeyCode>>,
+    windows: ResMut<Windows>,
+    mut camera_query: Query<&mut Transform, With<Camera>>,
+) {
+    let mut camera_transform = camera_query.single_mut();
+
+    // Update the camera position based on the keyboard input.
+    let mut movement_delta = Vec3::new(0.0, 0.0, 0.0);
+    // Up
+    if keyboard.pressed(KeyCode::W) {
+        movement_delta.y += 1.0;
+    }
+    // Down
+    else if keyboard.pressed(KeyCode::S) {
+        movement_delta.y -= 1.0;
+    }
+    // Left
+    if keyboard.pressed(KeyCode::A) {
+        movement_delta.x -= 1.0;
+    }
+    // Right
+    else if keyboard.pressed(KeyCode::D) {
+        movement_delta.x += 1.0;
+    }
+
+    if movement_delta != Vec3::ZERO {
+        // Normalize
+        movement_delta /= movement_delta.length();
+        movement_delta *= CAMERA_MOVEMENT_SPEED;
+    }
+    camera_transform.translation += movement_delta;
+
+    // Get the primary window.
+    let window = windows.get_primary().unwrap();
+    // Get the size of the window.
+    let window_width = window.width();
+    let window_height = window.height();
+
+    let buffer = 4096.0;
+    let min_x = 0.0 + (window_width / 2.0) - buffer;
+    let min_y = 0.0 + (window_height / 2.0) - buffer;
+    let max_x = (MAP_WIDTH as f32 * TILE_SIZE as f32) - (window_width / 2.0) + buffer;
+    let max_y = (MAP_HEIGHT as f32 * TILE_SIZE as f32) - (window_height / 2.0) + buffer;
+    // println!("min_x: {}, min_y: {}, max_x: {}, max_y: {}", min_x, min_y, max_x, max_y);
+
+    // Bound the Camera Movement
+    camera_transform.translation.x = max_x.min(min_x.max(camera_transform.translation.x));
+    camera_transform.translation.y = max_y.min(min_y.max(camera_transform.translation.y));
+
+    // println!("Camera Position: {:?}", camera_transform.translation);
+}
+
+pub fn update_camera_zoom(
+    mut scroll_events: EventReader<MouseWheel>,
+    mut camera_query: Query<&mut OrthographicProjection, With<Camera2d>>,
+) {
+    for event in scroll_events.iter() {
+        for mut orthographic_projection in camera_query.iter_mut() {
+            let scroll_sensitivity: f32;
+            match event.unit {
+                MouseScrollUnit::Line => {
+                    // Mice
+                    scroll_sensitivity = 1.0;
+                }
+                MouseScrollUnit::Pixel => {
+                    // Track Pads
+                    scroll_sensitivity = 1.0;
+                }
+            }
+            let mut log_scale = orthographic_projection.scale.ln();
+
+            // Scroll Direction
+            log_scale -= event.y * CAMERA_SCROLL_SPEED * scroll_sensitivity;
+
+            let new_scale = log_scale.exp();
+
+            if new_scale > CAMERA_MAX_ZOOM {
+                orthographic_projection.scale = CAMERA_MAX_ZOOM;
+            } else if new_scale < CAMERA_MIN_ZOOM {
+                orthographic_projection.scale = CAMERA_MIN_ZOOM;
+            } else {
+                orthographic_projection.scale = new_scale;
+            }
+        }
     }
 }
 
