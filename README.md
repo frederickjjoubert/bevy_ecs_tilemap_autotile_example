@@ -5,6 +5,10 @@ following [RFC](https://github.com/StarArawn/bevy_ecs_tilemap/discussions/326) t
 
 # Controls
 
+WASD to move camera.
+
+Scroll in and out to zoom camera.
+
 Click to place tiles.
 
 Press 0 to select blank tiles.
