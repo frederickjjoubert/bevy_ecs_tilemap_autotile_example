@@ -423,1194 +423,2386 @@ pub fn setup_sprites(mut commands: Commands) {
 
 pub fn setup_rules(mut commands: Commands) {
     let rules = Rules {
-        rules: HashMap::from([(
-            SpriteType::Grass,
-            Vec::from([
-                // Basic Rules
-                // === Row 1 ===
-                // 0
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_000_010_010,
-                ),
-                // 1
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_000_011_010,
-                ),
-                // 2
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_000_111_010,
-                ),
-                // 3
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_000_110_010,
-                ),
-                // 4
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_110_111_010,
-                ),
-                // 5
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_000_111_011,
-                ),
-                // 6
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_000_111_110,
-                ),
-                // 7
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_011_111_010,
-                ),
-                // 8
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_000_011_011,
-                ),
-                // 9
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_010_111_111,
-                ),
-                // 10
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_000_111_111,
-                ),
-                // 11
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_000_110_110,
-                ),
-                // === Row 2 ===
-                // 12
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_010_010_010,
-                ),
-                // 13
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_010_011_010,
-                ),
-                // 14
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_010_111_010,
-                ),
-                // 15
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_010_110_010,
-                ),
-                // 16
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_010_011_011,
-                ),
-                // 17
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_011_111_111,
-                ),
-                // 18
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_110_111_111,
-                ),
-                // 19
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_010_110_110,
-                ),
-                // 20
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_011_011_011,
-                ),
-                // 21
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_011_111_110,
-                ),
-                // 22
-                // No Rule for blank tile.
-                // 23
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_110_111_110,
-                ),
-                // === Row 3 ===
-                // 24
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_010_010_000,
-                ),
-                // 25
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_010_011_000,
-                ),
-                // 26
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_010_111_000,
-                ),
-                // 27
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_010_110_000,
-                ),
-                // 28
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_011_011_010,
-                ),
-                // 29
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_111_111_011,
-                ),
-                // 30
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_111_111_110,
-                ),
-                // 31
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_110_110_010,
-                ),
-                // 32
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_011_111_011,
-                ),
-                // 33
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_111_111_111,
-                ),
-                // 34
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_110_111_011,
-                ),
-                // 35
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_110_110_110,
-                ),
-                // === Row 4 ===
-                // 36
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_000_010_000,
-                ),
-                // 37
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_000_011_000,
-                ),
-                // 38
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_000_111_000,
-                ),
-                // 39
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Empty,
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_000_110_000,
-                ),
-                // 40
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_010_111_110,
-                ),
-                // 41
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_011_111_000,
-                ),
-                // 42
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_110_111_000,
-                ),
-                // 43
-                (
-                    Rule {
-                        nw_slot: Slot::Empty,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Empty,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                    },
-                    Sprite::Grass_010_111_011,
-                ),
-                // 44
-                (
-                    Rule {
-                        nw_slot: Slot::Any,
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Empty,
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_011_011_000,
-                ),
-                // 45
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_111_111_000,
-                ),
-                // 46
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        sw_slot: Slot::Empty,
-                        s_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        se_slot: Slot::Empty,
-                    },
-                    Sprite::Grass_111_111_010,
-                ),
-                // 47
-                (
-                    Rule {
-                        nw_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        n_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        ne_slot: Slot::Any,
-                        w_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        c_slot: Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        },
-                        e_slot: Slot::Empty,
-                        sw_slot: Slot::Any,
-                        s_slot: Slot::Empty,
-                        se_slot: Slot::Any,
-                    },
-                    Sprite::Grass_110_110_000,
-                ),
-                // Custom Rules
-            ]),
-        )]),
+        rules: HashMap::from([
+            // Grass
+            (
+                SpriteType::Grass,
+                Vec::from([
+                    // Basic Rules
+                    // === Row 1 ===
+                    // 0
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_000_010_010,
+                    ),
+                    // 1
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_000_011_010,
+                    ),
+                    // 2
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_000_111_010,
+                    ),
+                    // 3
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_000_110_010,
+                    ),
+                    // 4
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_110_111_010,
+                    ),
+                    // 5
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_000_111_011,
+                    ),
+                    // 6
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_000_111_110,
+                    ),
+                    // 7
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_011_111_010,
+                    ),
+                    // 8
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_000_011_011,
+                    ),
+                    // 9
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_010_111_111,
+                    ),
+                    // 10
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_000_111_111,
+                    ),
+                    // 11
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_000_110_110,
+                    ),
+                    // === Row 2 ===
+                    // 12
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_010_010_010,
+                    ),
+                    // 13
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_010_011_010,
+                    ),
+                    // 14
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_010_111_010,
+                    ),
+                    // 15
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_010_110_010,
+                    ),
+                    // 16
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_010_011_011,
+                    ),
+                    // 17
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_011_111_111,
+                    ),
+                    // 18
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_110_111_111,
+                    ),
+                    // 19
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_010_110_110,
+                    ),
+                    // 20
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_011_011_011,
+                    ),
+                    // 21
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_011_111_110,
+                    ),
+                    // 22
+                    // No Rule for blank tile.
+                    // 23
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_110_111_110,
+                    ),
+                    // === Row 3 ===
+                    // 24
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_010_010_000,
+                    ),
+                    // 25
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_010_011_000,
+                    ),
+                    // 26
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_010_111_000,
+                    ),
+                    // 27
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_010_110_000,
+                    ),
+                    // 28
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_011_011_010,
+                    ),
+                    // 29
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_111_111_011,
+                    ),
+                    // 30
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_111_111_110,
+                    ),
+                    // 31
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_110_110_010,
+                    ),
+                    // 32
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_011_111_011,
+                    ),
+                    // 33
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_111_111_111,
+                    ),
+                    // 34
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_110_111_011,
+                    ),
+                    // 35
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_110_110_110,
+                    ),
+                    // === Row 4 ===
+                    // 36
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_000_010_000,
+                    ),
+                    // 37
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_000_011_000,
+                    ),
+                    // 38
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_000_111_000,
+                    ),
+                    // 39
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_000_110_000,
+                    ),
+                    // 40
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_010_111_110,
+                    ),
+                    // 41
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_011_111_000,
+                    ),
+                    // 42
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_110_111_000,
+                    ),
+                    // 43
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                        },
+                        Sprite::Grass_010_111_011,
+                    ),
+                    // 44
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_011_011_000,
+                    ),
+                    // 45
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_111_111_000,
+                    ),
+                    // 46
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Grass_111_111_010,
+                    ),
+                    // 47
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Grass,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Grass_110_110_000,
+                    ),
+                    // Custom Rules
+                ]),
+            ),
+            // Dirt
+            (
+                SpriteType::Dirt,
+                Vec::from([
+                    // Basic Rules
+                    // === Row 1 ===
+                    // 0
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_000_010_010,
+                    ),
+                    // 1
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_000_011_010,
+                    ),
+                    // 2
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_000_111_010,
+                    ),
+                    // 3
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_000_110_010,
+                    ),
+                    // 4
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_110_111_010,
+                    ),
+                    // 5
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_000_111_011,
+                    ),
+                    // 6
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_000_111_110,
+                    ),
+                    // 7
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_011_111_010,
+                    ),
+                    // 8
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_000_011_011,
+                    ),
+                    // 9
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_010_111_111,
+                    ),
+                    // 10
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_000_111_111,
+                    ),
+                    // 11
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_000_110_110,
+                    ),
+                    // === Row 2 ===
+                    // 12
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_010_010_010,
+                    ),
+                    // 13
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_010_011_010,
+                    ),
+                    // 14
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_010_111_010,
+                    ),
+                    // 15
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_010_110_010,
+                    ),
+                    // 16
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_010_011_011,
+                    ),
+                    // 17
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_011_111_111,
+                    ),
+                    // 18
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_110_111_111,
+                    ),
+                    // 19
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_010_110_110,
+                    ),
+                    // 20
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_011_011_011,
+                    ),
+                    // 21
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_011_111_110,
+                    ),
+                    // 22
+                    // No Rule for blank tile.
+                    // 23
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_110_111_110,
+                    ),
+                    // === Row 3 ===
+                    // 24
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_010_010_000,
+                    ),
+                    // 25
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_010_011_000,
+                    ),
+                    // 26
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_010_111_000,
+                    ),
+                    // 27
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_010_110_000,
+                    ),
+                    // 28
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_011_011_010,
+                    ),
+                    // 29
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_111_111_011,
+                    ),
+                    // 30
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_111_111_110,
+                    ),
+                    // 31
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_110_110_010,
+                    ),
+                    // 32
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_011_111_011,
+                    ),
+                    // 33
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_111_111_111,
+                    ),
+                    // 34
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_110_111_011,
+                    ),
+                    // 35
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_110_110_110,
+                    ),
+                    // === Row 4 ===
+                    // 36
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_000_010_000,
+                    ),
+                    // 37
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_000_011_000,
+                    ),
+                    // 38
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_000_111_000,
+                    ),
+                    // 39
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Empty,
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_000_110_000,
+                    ),
+                    // 40
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_010_111_110,
+                    ),
+                    // 41
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_011_111_000,
+                    ),
+                    // 42
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_110_111_000,
+                    ),
+                    // 43
+                    (
+                        Rule {
+                            nw_slot: Slot::Empty,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Empty,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                        },
+                        Sprite::Dirt_010_111_011,
+                    ),
+                    // 44
+                    (
+                        Rule {
+                            nw_slot: Slot::Any,
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Empty,
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_011_011_000,
+                    ),
+                    // 45
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_111_111_000,
+                    ),
+                    // 46
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            sw_slot: Slot::Empty,
+                            s_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            se_slot: Slot::Empty,
+                        },
+                        Sprite::Dirt_111_111_010,
+                    ),
+                    // 47
+                    (
+                        Rule {
+                            nw_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            n_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            ne_slot: Slot::Any,
+                            w_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            c_slot: Slot::Filled {
+                                sprite_type: SpriteType::Dirt,
+                            },
+                            e_slot: Slot::Empty,
+                            sw_slot: Slot::Any,
+                            s_slot: Slot::Empty,
+                            se_slot: Slot::Any,
+                        },
+                        Sprite::Dirt_110_110_000,
+                    ),
+                    // Custom Rules
+                ]),
+            ),
+        ]),
     };
     commands.insert_resource(rules);
 }
@@ -1753,7 +2945,6 @@ pub fn update_active_rules(
 
             // Grass Tiles
             for tile_position in grass_tiles_query.iter() {
-                // 1. Create current rule for tile neighbors.
                 let neighbors = get_tile_neighbors(tile_position, tile_storage, tilemap_type);
 
                 // NW
@@ -1961,6 +3152,216 @@ pub fn update_active_rules(
                     .active_rules
                     .insert(*tile_position, current_rule);
             }
+
+            // Dirt Tiles
+            for tile_position in dirt_tiles_query.iter() {
+                let neighbors = get_tile_neighbors(tile_position, tile_storage, tilemap_type);
+
+                // NW
+                let north_west_slot: Slot;
+                if let Some(nw_neighbor) = neighbors.north_west {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(nw_neighbor) {
+                        north_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        };
+                    } else if dirt_tiles_query.contains(nw_neighbor) {
+                        north_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(nw_neighbor) {
+                        north_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        north_west_slot = Slot::Empty
+                    }
+                } else {
+                    north_west_slot = Slot::Empty
+                }
+
+                // N
+                let north_slot: Slot;
+                if let Some(north_neighbor_entity) = neighbors.north {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(north_neighbor_entity) {
+                        north_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(north_neighbor_entity) {
+                        north_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(north_neighbor_entity) {
+                        north_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        north_slot = Slot::Empty
+                    }
+                } else {
+                    north_slot = Slot::Empty
+                }
+
+                // NE
+                let north_east_slot: Slot;
+                if let Some(north_east_neighbor_entity) = neighbors.north_east {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(north_east_neighbor_entity) {
+                        north_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(north_east_neighbor_entity) {
+                        north_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(north_east_neighbor_entity) {
+                        north_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        north_east_slot = Slot::Empty
+                    }
+                } else {
+                    north_east_slot = Slot::Empty
+                }
+
+                // W
+                let west_slot: Slot;
+                if let Some(west_neighbor_entity) = neighbors.west {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(west_neighbor_entity) {
+                        west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(west_neighbor_entity) {
+                        west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(west_neighbor_entity) {
+                        west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        west_slot = Slot::Empty
+                    }
+                } else {
+                    west_slot = Slot::Empty
+                }
+
+                // C
+                let center_slot = Slot::Filled {
+                    sprite_type: SpriteType::Dirt,
+                };
+
+                // E
+                let east_slot: Slot;
+                if let Some(east_neighbor_entity) = neighbors.east {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(east_neighbor_entity) {
+                        east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(east_neighbor_entity) {
+                        east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(east_neighbor_entity) {
+                        east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        east_slot = Slot::Empty
+                    }
+                } else {
+                    east_slot = Slot::Empty
+                }
+
+                // SW
+                let south_west_slot: Slot;
+                if let Some(south_west_neighbor_entity) = neighbors.south_west {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(south_west_neighbor_entity) {
+                        south_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(south_west_neighbor_entity) {
+                        south_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(south_west_neighbor_entity) {
+                        south_west_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        south_west_slot = Slot::Empty
+                    }
+                } else {
+                    south_west_slot = Slot::Empty
+                }
+
+                // S
+                let south_slot: Slot;
+                if let Some(south_neighbor_entity) = neighbors.south {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(south_neighbor_entity) {
+                        south_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(south_neighbor_entity) {
+                        south_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(south_neighbor_entity) {
+                        south_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        south_slot = Slot::Empty
+                    }
+                } else {
+                    south_slot = Slot::Empty
+                }
+
+                // SE
+                let south_east_slot: Slot;
+                if let Some(south_east_neighbor_entity) = neighbors.south_east {
+                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                    if grass_tiles_query.contains(south_east_neighbor_entity) {
+                        south_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        }
+                    } else if dirt_tiles_query.contains(south_east_neighbor_entity) {
+                        south_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Dirt,
+                        }
+                    } else if water_tiles_query.contains(south_east_neighbor_entity) {
+                        south_east_slot = Slot::Filled {
+                            sprite_type: SpriteType::Water,
+                        }
+                    } else {
+                        south_east_slot = Slot::Empty
+                    }
+                } else {
+                    south_east_slot = Slot::Empty
+                }
+
+                let current_rule = Rule {
+                    nw_slot: north_west_slot,
+                    n_slot: north_slot,
+                    ne_slot: north_east_slot,
+                    w_slot: west_slot,
+                    c_slot: center_slot,
+                    e_slot: east_slot,
+                    sw_slot: south_west_slot,
+                    s_slot: south_slot,
+                    se_slot: south_east_slot,
+                };
+
+                active_rules
+                    .active_rules
+                    .insert(*tile_position, current_rule);
+            }
         }
     }
 }
@@ -1986,6 +3387,20 @@ pub fn update_tilemap(
     if active_rules.is_changed() {
         let possible_rules = rules.rules[&SpriteType::Grass].clone();
         for (tile_position, mut tile_texture) in grass_tiles_query.iter_mut() {
+            if active_rules.active_rules.contains_key(tile_position) {
+                let active_rule = active_rules.active_rules[tile_position];
+                let mut new_sprite = Sprite::Blank;
+                for (rule, sprite) in possible_rules.iter() {
+                    if active_rule == *rule {
+                        new_sprite = sprite.clone();
+                        break;
+                    }
+                }
+                tile_texture.0 = sprites.sprite_lookup_table[&new_sprite];
+            }
+        }
+        let possible_rules = rules.rules[&SpriteType::Dirt].clone();
+        for (tile_position, mut tile_texture) in dirt_tiles_query.iter_mut() {
             if active_rules.active_rules.contains_key(tile_position) {
                 let active_rule = active_rules.active_rules[tile_position];
                 let mut new_sprite = Sprite::Blank;
