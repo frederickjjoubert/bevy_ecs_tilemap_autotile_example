@@ -54,6 +54,11 @@ pub struct DirtTile {}
 #[derive(Component, Debug)]
 pub struct WaterTile {}
 
+#[derive(Component, Debug)]
+pub struct TileType {
+    sprite_type: SpriteType,
+}
+
 // === Events ===
 pub struct UpdateTilemapEvent {}
 
@@ -200,6 +205,7 @@ pub struct Rule {
     pub n_slow: Slot,
     pub ne_slot: Slot,
     pub w_slot: Slot,
+    pub c_slot: Slot,
     pub e_slot: Slot,
     pub sw_slot: Slot,
     pub s_slot: Slot,
@@ -224,6 +230,10 @@ pub struct Sprites {
 
 pub struct Rules {
     pub rules: HashMap<SpriteType, Vec<(Rule, Sprite)>>,
+}
+
+pub struct ActiveRules {
+    pub active_rules: HashMap<TilePos, Rule>,
 }
 
 // === Startup Systems ===
@@ -384,6 +394,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Filled {
@@ -400,6 +413,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -420,6 +436,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -438,6 +457,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Empty,
@@ -462,6 +484,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -480,6 +505,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -502,6 +530,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -530,6 +561,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -548,6 +582,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -570,6 +607,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -596,6 +636,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -620,6 +663,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
@@ -641,6 +687,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Filled {
@@ -659,6 +708,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -679,6 +731,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -703,6 +758,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Filled {
@@ -721,6 +779,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -745,6 +806,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -775,6 +839,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -801,6 +868,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
@@ -823,6 +893,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -847,6 +920,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -877,6 +953,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -900,6 +979,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Empty,
@@ -916,6 +998,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -934,6 +1019,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -956,6 +1044,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Empty,
@@ -974,6 +1065,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -998,6 +1092,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -1028,6 +1125,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1054,6 +1154,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Filled {
@@ -1074,6 +1177,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -1104,6 +1210,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1132,6 +1241,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1158,6 +1270,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
@@ -1177,6 +1292,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Empty,
@@ -1191,6 +1309,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1207,6 +1328,9 @@ pub fn setup_rules(mut commands: Commands) {
                         n_slow: Slot::Empty,
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -1227,6 +1351,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Empty,
@@ -1243,6 +1370,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -1271,6 +1401,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1293,6 +1426,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1311,6 +1447,9 @@ pub fn setup_rules(mut commands: Commands) {
                         },
                         ne_slot: Slot::Empty,
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -1337,6 +1476,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Empty,
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1359,6 +1501,9 @@ pub fn setup_rules(mut commands: Commands) {
                             sprite_type: SpriteType::Grass,
                         },
                         w_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
+                        c_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
                         e_slot: Slot::Filled {
@@ -1385,6 +1530,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
@@ -1409,6 +1557,9 @@ pub fn setup_rules(mut commands: Commands) {
                         w_slot: Slot::Filled {
                             sprite_type: SpriteType::Grass,
                         },
+                        c_slot: Slot::Filled {
+                            sprite_type: SpriteType::Grass,
+                        },
                         e_slot: Slot::Empty,
                         sw_slot: Slot::Empty,
                         s_slot: Slot::Empty,
@@ -1421,6 +1572,13 @@ pub fn setup_rules(mut commands: Commands) {
         )]),
     };
     commands.insert_resource(rules);
+}
+
+pub fn setup_active_rules(mut commands: Commands) {
+    let active_rules = ActiveRules {
+        active_rules: HashMap::new(),
+    };
+    commands.insert_resource(active_rules);
 }
 
 pub fn setup_tilemap(mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -1442,6 +1600,9 @@ pub fn setup_tilemap(mut commands: Commands, asset_server: Res<AssetServer>) {
                     texture: TileTexture(102), // 102 is blank
                     tilemap_id: TilemapId(tilemap_entity),
                     ..default()
+                })
+                .insert(TileType {
+                    sprite_type: SpriteType::Blank,
                 })
                 .id();
             tile_storage.set(&tile_position, tile_entity);
@@ -1492,6 +1653,7 @@ pub fn place_tile(
         &TileStorage,
         &Transform,
     )>,
+    tiles_query: Query<&mut TileType>,
 ) {
     if mouse.holding_lmb {
         for (map_size, grid_size, map_type, tile_storage, map_transform) in tilemap_query.iter() {
@@ -1509,23 +1671,34 @@ pub fn place_tile(
             if let Some(tile_position) =
                 TilePos::from_world_pos(&cursor_in_map_pos, map_size, grid_size, map_type)
             {
-                // My code
                 if let Some(tile_entity) = tile_storage.get(&tile_position) {
                     commands.entity(tile_entity).remove::<GrassTile>();
                     commands.entity(tile_entity).remove::<DirtTile>();
                     commands.entity(tile_entity).remove::<WaterTile>();
+                    commands.entity(tile_entity).remove::<TileType>();
                     match game_state.selection {
+                        SpriteType::Blank => {
+                            commands.entity(tile_entity).insert(TileType {
+                                sprite_type: SpriteType::Blank,
+                            });
+                        }
                         SpriteType::Grass => {
                             commands.entity(tile_entity).insert(GrassTile {});
+                            commands.entity(tile_entity).insert(TileType {
+                                sprite_type: SpriteType::Grass,
+                            });
                         }
                         SpriteType::Dirt => {
                             commands.entity(tile_entity).insert(DirtTile {});
+                            commands.entity(tile_entity).insert(TileType {
+                                sprite_type: SpriteType::Dirt,
+                            });
                         }
                         SpriteType::Water => {
                             commands.entity(tile_entity).insert(WaterTile {});
-                        }
-                        _ => {
-                            // Do Nothing
+                            commands.entity(tile_entity).insert(TileType {
+                                sprite_type: SpriteType::Water,
+                            });
                         }
                     }
                     update_tilemap_event_writer.send(UpdateTilemapEvent {});
@@ -1535,243 +1708,232 @@ pub fn place_tile(
     }
 }
 
-pub fn update_tilemap(
+pub fn update_active_rules(
     mut update_tilemap_event_reader: EventReader<UpdateTilemapEvent>,
+    mut tiles_query: Query<(Entity, &TileType, &TilePos, &mut TileTexture)>,
     mut tilemap_query: Query<(&TilemapSize, &TileStorage, &TilemapType)>,
-    mut blank_tiles_query: Query<
-        (Entity, &TilePos, &mut TileTexture),
-        (Without<GrassTile>, Without<DirtTile>, Without<WaterTile>),
-    >,
-    mut grass_tiles_query: Query<
-        (Entity, &TilePos, &mut TileTexture),
-        (With<GrassTile>, Without<DirtTile>, Without<WaterTile>),
-    >,
-    mut dirt_tiles_query: Query<
-        (Entity, &TilePos, &mut TileTexture),
-        (With<DirtTile>, Without<GrassTile>, Without<WaterTile>),
-    >,
-    mut water_tiles_query: Query<
-        (Entity, &TilePos, &mut TileTexture),
-        (With<WaterTile>, Without<GrassTile>, Without<DirtTile>),
-    >,
-    sprites: Res<Sprites>,
 ) {
-    // Perform auto tiling based on neighbors and rules
     for _ in update_tilemap_event_reader.iter() {
-        for (entity, tile_position, mut tile_texture_index) in blank_tiles_query.iter_mut() {
-            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Blank];
-        }
-        for (entity, tile_position, mut tile_texture_index) in grass_tiles_query.iter_mut() {
-            if let Ok((tilemap_size, tile_storage, tilemap_type)) = tilemap_query.get_single_mut() {
-                // let neighbor_positions = get_neighboring_pos(tile_position, tilemap_size, tilemap_type);
-                // 1. Create current rule for tile neighbors.
-                let neighbors = get_tile_neighbors(tile_position, tile_storage, tilemap_type);
+        if let Ok((tilemap_size, tile_storage, tilemap_type)) = tilemap_query.get_single_mut() {
+            for (entity, tile_type, tile_position, mut tile_texture) in tiles_query {}
 
-                // NW
-                let north_west_slot: Slot;
-                if let Some(nw_neighbor) = neighbors.north_west {
-                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                    if grass_tiles_query.contains(nw_neighbor) {
-                        north_west_slot = Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        }
-                    } else if dirt_tiles_query.contains(nw_neighbor) {
-                        north_west_slot = Slot::Filled {
-                            sprite_type: SpriteType::Dirt,
-                        }
-                    } else if water_tiles_query.contains(nw_neighbor) {
-                        north_west_slot = Slot::Filled {
-                            sprite_type: SpriteType::Water,
-                        }
-                    } else {
-                        north_west_slot = Slot::Empty
+            // let neighbor_positions = get_neighboring_pos(tile_position, tilemap_size, tilemap_type);
+            // 1. Create current rule for tile neighbors.
+            let neighbors = get_tile_neighbors(tile_position, tile_storage, tilemap_type);
+
+            // NW
+            let north_west_slot: Slot;
+            if let Some(nw_neighbor) = neighbors.north_west {
+                // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                if grass_tiles_query.contains(nw_neighbor) {
+                    north_west_slot = Slot::Filled {
+                        sprite_type: SpriteType::Grass,
+                    }
+                } else if dirt_tiles_query.contains(nw_neighbor) {
+                    north_west_slot = Slot::Filled {
+                        sprite_type: SpriteType::Dirt,
+                    }
+                } else if water_tiles_query.contains(nw_neighbor) {
+                    north_west_slot = Slot::Filled {
+                        sprite_type: SpriteType::Water,
                     }
                 } else {
                     north_west_slot = Slot::Empty
                 }
+            } else {
+                north_west_slot = Slot::Empty
+            }
 
-                // N
-                let north_slot: Slot;
-                if let Some(north_neighbor_entity) = neighbors.north {
-                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                    if grass_tiles_query.contains(north_neighbor_entity) {
-                        north_slot = Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        }
-                    } else if dirt_tiles_query.contains(north_neighbor_entity) {
-                        north_slot = Slot::Filled {
-                            sprite_type: SpriteType::Dirt,
-                        }
-                    } else if water_tiles_query.contains(north_neighbor_entity) {
-                        north_slot = Slot::Filled {
-                            sprite_type: SpriteType::Water,
-                        }
-                    } else {
-                        north_slot = Slot::Empty
+            // N
+            let north_slot: Slot;
+            if let Some(north_neighbor_entity) = neighbors.north {
+                // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                if grass_tiles_query.contains(north_neighbor_entity) {
+                    north_slot = Slot::Filled {
+                        sprite_type: SpriteType::Grass,
+                    }
+                } else if dirt_tiles_query.contains(north_neighbor_entity) {
+                    north_slot = Slot::Filled {
+                        sprite_type: SpriteType::Dirt,
+                    }
+                } else if water_tiles_query.contains(north_neighbor_entity) {
+                    north_slot = Slot::Filled {
+                        sprite_type: SpriteType::Water,
                     }
                 } else {
                     north_slot = Slot::Empty
                 }
+            } else {
+                north_slot = Slot::Empty
+            }
 
-                // NE
-                let north_east_slot: Slot;
-                if let Some(north_east_neighbor_entity) = neighbors.north_east {
-                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                    if grass_tiles_query.contains(north_east_neighbor_entity) {
-                        north_east_slot = Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        }
-                    } else if dirt_tiles_query.contains(north_east_neighbor_entity) {
-                        north_east_slot = Slot::Filled {
-                            sprite_type: SpriteType::Dirt,
-                        }
-                    } else if water_tiles_query.contains(north_east_neighbor_entity) {
-                        north_east_slot = Slot::Filled {
-                            sprite_type: SpriteType::Water,
-                        }
-                    } else {
-                        north_east_slot = Slot::Empty
+            // NE
+            let north_east_slot: Slot;
+            if let Some(north_east_neighbor_entity) = neighbors.north_east {
+                // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                if grass_tiles_query.contains(north_east_neighbor_entity) {
+                    north_east_slot = Slot::Filled {
+                        sprite_type: SpriteType::Grass,
+                    }
+                } else if dirt_tiles_query.contains(north_east_neighbor_entity) {
+                    north_east_slot = Slot::Filled {
+                        sprite_type: SpriteType::Dirt,
+                    }
+                } else if water_tiles_query.contains(north_east_neighbor_entity) {
+                    north_east_slot = Slot::Filled {
+                        sprite_type: SpriteType::Water,
                     }
                 } else {
                     north_east_slot = Slot::Empty
                 }
+            } else {
+                north_east_slot = Slot::Empty
+            }
 
-                // W
-                let west_slot: Slot;
-                if let Some(west_neighbor_entity) = neighbors.west {
-                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                    if grass_tiles_query.contains(west_neighbor_entity) {
-                        west_slot = Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        }
-                    } else if dirt_tiles_query.contains(west_neighbor_entity) {
-                        west_slot = Slot::Filled {
-                            sprite_type: SpriteType::Dirt,
-                        }
-                    } else if water_tiles_query.contains(west_neighbor_entity) {
-                        west_slot = Slot::Filled {
-                            sprite_type: SpriteType::Water,
-                        }
-                    } else {
-                        west_slot = Slot::Empty
+            // W
+            let west_slot: Slot;
+            if let Some(west_neighbor_entity) = neighbors.west {
+                // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                if grass_tiles_query.contains(west_neighbor_entity) {
+                    west_slot = Slot::Filled {
+                        sprite_type: SpriteType::Grass,
+                    }
+                } else if dirt_tiles_query.contains(west_neighbor_entity) {
+                    west_slot = Slot::Filled {
+                        sprite_type: SpriteType::Dirt,
+                    }
+                } else if water_tiles_query.contains(west_neighbor_entity) {
+                    west_slot = Slot::Filled {
+                        sprite_type: SpriteType::Water,
                     }
                 } else {
                     west_slot = Slot::Empty
                 }
+            } else {
+                west_slot = Slot::Empty
+            }
 
-                // E
-                let east_slot: Slot;
-                if let Some(east_neighbor_entity) = neighbors.east {
-                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                    if grass_tiles_query.contains(east_neighbor_entity) {
-                        east_slot = Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        }
-                    } else if dirt_tiles_query.contains(east_neighbor_entity) {
-                        east_slot = Slot::Filled {
-                            sprite_type: SpriteType::Dirt,
-                        }
-                    } else if water_tiles_query.contains(east_neighbor_entity) {
-                        east_slot = Slot::Filled {
-                            sprite_type: SpriteType::Water,
-                        }
-                    } else {
-                        east_slot = Slot::Empty
+            // E
+            let east_slot: Slot;
+            if let Some(east_neighbor_entity) = neighbors.east {
+                // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                if grass_tiles_query.contains(east_neighbor_entity) {
+                    east_slot = Slot::Filled {
+                        sprite_type: SpriteType::Grass,
+                    }
+                } else if dirt_tiles_query.contains(east_neighbor_entity) {
+                    east_slot = Slot::Filled {
+                        sprite_type: SpriteType::Dirt,
+                    }
+                } else if water_tiles_query.contains(east_neighbor_entity) {
+                    east_slot = Slot::Filled {
+                        sprite_type: SpriteType::Water,
                     }
                 } else {
                     east_slot = Slot::Empty
                 }
+            } else {
+                east_slot = Slot::Empty
+            }
 
-                // SW
-                let south_west_slot: Slot;
-                if let Some(south_west_neighbor_entity) = neighbors.south_west {
-                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                    if grass_tiles_query.contains(south_west_neighbor_entity) {
-                        south_west_slot = Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        }
-                    } else if dirt_tiles_query.contains(south_west_neighbor_entity) {
-                        south_west_slot = Slot::Filled {
-                            sprite_type: SpriteType::Dirt,
-                        }
-                    } else if water_tiles_query.contains(south_west_neighbor_entity) {
-                        south_west_slot = Slot::Filled {
-                            sprite_type: SpriteType::Water,
-                        }
-                    } else {
-                        south_west_slot = Slot::Empty
+            // SW
+            let south_west_slot: Slot;
+            if let Some(south_west_neighbor_entity) = neighbors.south_west {
+                // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                if grass_tiles_query.contains(south_west_neighbor_entity) {
+                    south_west_slot = Slot::Filled {
+                        sprite_type: SpriteType::Grass,
+                    }
+                } else if dirt_tiles_query.contains(south_west_neighbor_entity) {
+                    south_west_slot = Slot::Filled {
+                        sprite_type: SpriteType::Dirt,
+                    }
+                } else if water_tiles_query.contains(south_west_neighbor_entity) {
+                    south_west_slot = Slot::Filled {
+                        sprite_type: SpriteType::Water,
                     }
                 } else {
                     south_west_slot = Slot::Empty
                 }
+            } else {
+                south_west_slot = Slot::Empty
+            }
 
-                // S
-                let south_slot: Slot;
-                if let Some(south_neighbor_entity) = neighbors.south {
-                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                    if grass_tiles_query.contains(south_neighbor_entity) {
-                        south_slot = Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        }
-                    } else if dirt_tiles_query.contains(south_neighbor_entity) {
-                        south_slot = Slot::Filled {
-                            sprite_type: SpriteType::Dirt,
-                        }
-                    } else if water_tiles_query.contains(south_neighbor_entity) {
-                        south_slot = Slot::Filled {
-                            sprite_type: SpriteType::Water,
-                        }
-                    } else {
-                        south_slot = Slot::Empty
+            // S
+            let south_slot: Slot;
+            if let Some(south_neighbor_entity) = neighbors.south {
+                // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                if grass_tiles_query.contains(south_neighbor_entity) {
+                    south_slot = Slot::Filled {
+                        sprite_type: SpriteType::Grass,
+                    }
+                } else if dirt_tiles_query.contains(south_neighbor_entity) {
+                    south_slot = Slot::Filled {
+                        sprite_type: SpriteType::Dirt,
+                    }
+                } else if water_tiles_query.contains(south_neighbor_entity) {
+                    south_slot = Slot::Filled {
+                        sprite_type: SpriteType::Water,
                     }
                 } else {
                     south_slot = Slot::Empty
                 }
+            } else {
+                south_slot = Slot::Empty
+            }
 
-                // SE
-                let south_east_slot: Slot;
-                if let Some(south_east_neighbor_entity) = neighbors.south_east {
-                    // Can also change this system to only check for Grass Tiles and resolve others to Any.
-                    if grass_tiles_query.contains(south_east_neighbor_entity) {
-                        south_east_slot = Slot::Filled {
-                            sprite_type: SpriteType::Grass,
-                        }
-                    } else if dirt_tiles_query.contains(south_east_neighbor_entity) {
-                        south_east_slot = Slot::Filled {
-                            sprite_type: SpriteType::Dirt,
-                        }
-                    } else if water_tiles_query.contains(south_east_neighbor_entity) {
-                        south_east_slot = Slot::Filled {
-                            sprite_type: SpriteType::Water,
-                        }
-                    } else {
-                        south_east_slot = Slot::Empty
+            // SE
+            let south_east_slot: Slot;
+            if let Some(south_east_neighbor_entity) = neighbors.south_east {
+                // Can also change this system to only check for Grass Tiles and resolve others to Any.
+                if grass_tiles_query.contains(south_east_neighbor_entity) {
+                    south_east_slot = Slot::Filled {
+                        sprite_type: SpriteType::Grass,
+                    }
+                } else if dirt_tiles_query.contains(south_east_neighbor_entity) {
+                    south_east_slot = Slot::Filled {
+                        sprite_type: SpriteType::Dirt,
+                    }
+                } else if water_tiles_query.contains(south_east_neighbor_entity) {
+                    south_east_slot = Slot::Filled {
+                        sprite_type: SpriteType::Water,
                     }
                 } else {
                     south_east_slot = Slot::Empty
                 }
-
-                let current_rule = Rule {
-                    nw_slot: north_west_slot,
-                    n_slow: north_slot,
-                    ne_slot: north_east_slot,
-                    w_slot: west_slot,
-                    e_slot: east_slot,
-                    sw_slot: south_west_slot,
-                    s_slot: south_slot,
-                    se_slow: south_east_slot,
-                };
-
-                // 2. Find matching rule and resolve Sprite
+            } else {
+                south_east_slot = Slot::Empty
             }
 
-            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Grass_111_111_111];
+            let current_rule = Rule {
+                nw_slot: north_west_slot,
+                n_slow: north_slot,
+                ne_slot: north_east_slot,
+                w_slot: west_slot,
+                c_slot: Slot::Empty, // TODO: Add this case in above properly.
+                e_slot: east_slot,
+                sw_slot: south_west_slot,
+                s_slot: south_slot,
+                se_slow: south_east_slot,
+            };
+
+            active_rules.insert(*tile_position, current_rule);
         }
-        for (entity, tile_position, mut tile_texture_index) in dirt_tiles_query.iter_mut() {
-            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Dirt_111_111_111];
-        }
-        for (entity, tile_position, mut tile_texture_index) in water_tiles_query.iter_mut() {
-            tile_texture_index.0 = sprites.sprite_lookup_table[&Sprite::Water_0];
+    }
+}
+
+pub fn update_tilemap(
+    mut update_tilemap_event_reader: EventReader<UpdateTilemapEvent>,
+    mut tilemap_query: Query<(&TilemapSize, &TileStorage, &TilemapType)>,
+    mut tiles_query: Query<(Entity, &TilePos, &mut TileTexture)>,
+    sprites: Res<Sprites>,
+    active_rules: Res<ActiveRules>,
+    rules: Res<Rules>,
+) {
+    // Perform auto tiling based on neighbors and rules
+    for _ in update_tilemap_event_reader.iter() {
+        for (entity, tile_position, mut tile_texture) in tiles_query.iter_mut() {
+            let rule = active_rules[*tile_position];
         }
     }
 }
