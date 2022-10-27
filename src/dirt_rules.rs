@@ -1,13 +1,17 @@
 #![allow(clippy::unusual_byte_groupings)]
 
 use crate::ruleflag::RuleFlag;
-use bevy::prelude::Entity;
-use bevy_ecs_tilemap::helpers::square_grid::neighbors::{Neighbors, SQUARE_DIRECTIONS};
 use bevy_ecs_tilemap::tiles::TileTexture;
 
 #[derive(Clone, Copy, Debug, Hash)]
 pub struct DirtRule {
-    rule_flag: RuleFlag,
+    pub(crate) rule_flag: RuleFlag,
+}
+
+impl PartialEq for DirtRule {
+    fn eq(&self, other: &Self) -> bool {
+        self.rule_flag == other.rule_flag
+    }
 }
 
 impl From<&DirtRule> for TileTexture {

@@ -1,8 +1,8 @@
-use bevy_ecs_tilemap::helpers::square_grid::neighbors::RectangularDirection;
+use bevy_ecs_tilemap::helpers::square_grid::neighbors::SquareDirection;
 use bitflags::bitflags;
 
 bitflags! {
-    pub struct RuleFlag: u8 {
+    pub struct RuleFlag: u32 {
         const NW = 256; // equivalent to 0b_100_000_000;
         const N = 128; // equivalent to 0b_010_000_000;
         const NE = 64; // equivalent to 0b_001_000_000;
@@ -22,17 +22,17 @@ impl RuleFlag {
     }
 }
 
-impl From<RectangularDirection> for RuleFlag {
-    fn from(direction: RectangularDirection) -> Self {
+impl From<SquareDirection> for RuleFlag {
+    fn from(direction: SquareDirection) -> Self {
         match direction {
-            RectangularDirection::East => RuleFlag::E,
-            RectangularDirection::NorthEast => RuleFlag::NE,
-            RectangularDirection::North => RuleFlag::N,
-            RectangularDirection::NorthWest => RuleFlag::NW,
-            RectangularDirection::West => RuleFlag::W,
-            RectangularDirection::SouthWest => RuleFlag::SW,
-            RectangularDirection::South => RuleFlag::S,
-            RectangularDirection::SouthEast => RuleFlag::W,
+            SquareDirection::East => RuleFlag::E,
+            SquareDirection::NorthEast => RuleFlag::NE,
+            SquareDirection::North => RuleFlag::N,
+            SquareDirection::NorthWest => RuleFlag::NW,
+            SquareDirection::West => RuleFlag::W,
+            SquareDirection::SouthWest => RuleFlag::SW,
+            SquareDirection::South => RuleFlag::S,
+            SquareDirection::SouthEast => RuleFlag::W,
         }
     }
 }

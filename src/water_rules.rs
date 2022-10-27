@@ -1,10 +1,17 @@
 #![allow(clippy::unusual_byte_groupings)]
+
 use crate::ruleflag::RuleFlag;
 use bevy_ecs_tilemap::tiles::TileTexture;
 
 #[derive(Clone, Copy, Debug, Hash)]
 pub struct WaterRule {
-    rule_flag: RuleFlag,
+    pub(crate) rule_flag: RuleFlag,
+}
+
+impl PartialEq for WaterRule {
+    fn eq(&self, other: &Self) -> bool {
+        self.rule_flag == other.rule_flag
+    }
 }
 
 impl From<&WaterRule> for TileTexture {

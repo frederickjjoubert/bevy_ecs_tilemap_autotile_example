@@ -1,12 +1,17 @@
 #![allow(clippy::unusual_byte_groupings)]
+
 use crate::ruleflag::RuleFlag;
-use bevy::prelude::Entity;
-use bevy_ecs_tilemap::helpers::square_grid::neighbors::{Neighbors, SQUARE_DIRECTIONS};
 use bevy_ecs_tilemap::tiles::TileTexture;
 
 #[derive(Clone, Copy, Debug, Hash)]
 pub struct GrassRule {
-    rule_flag: RuleFlag,
+    pub(crate) rule_flag: RuleFlag,
+}
+
+impl PartialEq for GrassRule {
+    fn eq(&self, other: &Self) -> bool {
+        self.rule_flag == other.rule_flag
+    }
 }
 
 impl From<&GrassRule> for TileTexture {
@@ -18,8 +23,8 @@ impl From<&GrassRule> for TileTexture {
         // This is one example of how to test the rules
         if grass.rule_flag.contains(RuleFlag::C | RuleFlag::S)
             && grass
-                .rule_flag
-                .does_not_contain(RuleFlag::N | RuleFlag::W | RuleFlag::SE)
+            .rule_flag
+            .does_not_contain(RuleFlag::N | RuleFlag::W | RuleFlag::SE)
         {
             return TileTexture(0);
         }
@@ -30,8 +35,8 @@ impl From<&GrassRule> for TileTexture {
             .rule_flag
             .contains(RuleFlag::from_bits(0b_000_111_010).unwrap())
             && grass
-                .rule_flag
-                .does_not_contain(RuleFlag::from_bits(0b_000_111_010).unwrap())
+            .rule_flag
+            .does_not_contain(RuleFlag::from_bits(0b_000_111_010).unwrap())
         {
             return TileTexture(1);
         }

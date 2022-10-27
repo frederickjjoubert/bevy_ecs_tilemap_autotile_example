@@ -42,9 +42,7 @@ fn main() {
         .add_event::<UpdateTilemapEvent>()
         .add_startup_system(setup_camera)
         .add_startup_system(setup_mouse)
-        .add_startup_system(setup_rules.label(Setup::Rules))
         .add_startup_system(setup_active_rules.label(Setup::ActiveRules))
-        .add_startup_system(setup_sprites.label(Setup::Sprites))
         .add_startup_system(setup_tilemap.label(Setup::Tilemap))
         .add_startup_system(
             setup_game
@@ -87,6 +85,7 @@ enum Setup {
     Game,
 }
 
+#[allow(non_camel_case_types)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Tile {
     Blank,
@@ -143,7 +142,7 @@ pub struct Sprites {
 }
 
 pub struct Rules {
-    pub rules: HashMap<TerrainType, Vec<(Rule, Tile)>>,
+    pub rules: HashMap<TerrainType, Vec<(TerrainRule, Tile)>>,
 }
 
 pub struct ActiveRules {
@@ -270,7 +269,7 @@ pub fn place_tile(
             };
             // Once we have a world position we can transform it into a possible tile position.
             if let Some(tile_position) =
-                TilePos::from_world_pos(&cursor_in_map_pos, map_size, grid_size, map_type)
+            TilePos::from_world_pos(&cursor_in_map_pos, map_size, grid_size, map_type)
             {
                 if let Some(tile_entity) = tile_storage.get(&tile_position) {
                     commands.entity(tile_entity).remove::<GrassTile>();
@@ -344,10 +343,6 @@ pub fn update_active_rules(
                 active_rules
                     .active_rules
                     .insert(*tile_position, terrain_rule);
-
-                active_rules
-                    .active_rules
-                    .insert(*tile_position, current_rule);
             }
         }
     }
@@ -372,13 +367,13 @@ pub fn update_tilemap(
 ) {
     // Perform auto tiling based on neighbors and rules
     if active_rules.is_changed() {
-        let possible_rules = rules.rules[&TerrainType::Grass].clone();
+        let possible_rules = &rules.rules[&TerrainType::Grass];
         for (tile_position, mut tile_texture) in grass_tiles_query.iter_mut() {
             if active_rules.active_rules.contains_key(tile_position) {
-                let active_rule = active_rules.active_rules[tile_position];
+                let active_rule = &active_rules.active_rules[tile_position];
                 let mut new_sprite = Tile::Blank;
                 for (rule, sprite) in possible_rules.iter() {
-                    if active_rule == *rule {
+                    if *active_rule == *rule {
                         new_sprite = sprite.clone();
                         break;
                     }
@@ -386,13 +381,13 @@ pub fn update_tilemap(
                 tile_texture.0 = sprites.sprite_lookup_table[&new_sprite];
             }
         }
-        let possible_rules = rules.rules[&TerrainType::Dirt].clone();
+        let possible_rules = &rules.rules[&TerrainType::Dirt];
         for (tile_position, mut tile_texture) in dirt_tiles_query.iter_mut() {
             if active_rules.active_rules.contains_key(tile_position) {
-                let active_rule = active_rules.active_rules[tile_position];
+                let active_rule = &active_rules.active_rules[tile_position];
                 let mut new_sprite = Tile::Blank;
                 for (rule, sprite) in possible_rules.iter() {
-                    if active_rule == *rule {
+                    if *active_rule == *rule {
                         new_sprite = sprite.clone();
                         break;
                     }
@@ -421,7 +416,7 @@ pub fn update_selection(keyboard: Res<Input<KeyCode>>, mut game_state: ResMut<Ga
 
 pub fn update_mouse(
     mut mouse: ResMut<Mouse>,
-    mut mouse_input: Res<Input<MouseButton>>,
+    mouse_input: Res<Input<MouseButton>>,
     windows: Res<Windows>,
     camera_q: Query<(&Transform, &Camera)>,
     mut cursor_moved_events: EventReader<CursorMoved>,
