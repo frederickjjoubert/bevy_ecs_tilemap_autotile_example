@@ -16,8 +16,9 @@ opt-level = 3
 # Note I added the above optimizations and dynamic linking feature for Bevy following the Bevy setup: https://bevyengine.org/learn/book/getting-started/setup/
 
 [dependencies]
-bevy_ecs_tilemap = "0.8.0" # https://crates.io/crates/bevy_ecs_tilemap
+bevy_ecs_tilemap = { git = "https://github.com/StarArawn/bevy_ecs_tilemap", branch = "update-helpers" }
 bevy-inspector-egui = "0.13.0"
+bitflags = "1.3.2"
 
 # Guide https://bevy-cheatbook.github.io/setup/bevy-config.html
 [dependencies.bevy]
