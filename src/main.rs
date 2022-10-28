@@ -1,10 +1,7 @@
-mod dirt_rules;
-mod grass_rules;
 mod ruleflag;
 mod terrain_rules;
-mod water_rules;
 
-use crate::ruleflag::RuleFlag;
+use crate::ruleflag::RuleFlags;
 use crate::terrain_rules::TerrainRule;
 use bevy::input::mouse::{MouseScrollUnit, MouseWheel};
 use bevy::math::Vec4Swizzles;
@@ -110,7 +107,7 @@ pub enum Slot {
 // === Structs ===
 #[derive(Copy, Clone, Debug)]
 pub struct Rule {
-    rule_flag: RuleFlag,
+    rule_flag: RuleFlags,
 }
 
 impl Eq for Rule {}
@@ -265,7 +262,7 @@ pub fn place_tile(
             };
             // Once we have a world position we can transform it into a possible tile position.
             if let Some(tile_position) =
-            TilePos::from_world_pos(&cursor_in_map_pos, map_size, grid_size, map_type)
+                TilePos::from_world_pos(&cursor_in_map_pos, map_size, grid_size, map_type)
             {
                 if let Some(tile_entity) = tile_storage.get(&tile_position) {
                     commands.entity(tile_entity).remove::<GrassTile>();
@@ -367,7 +364,10 @@ pub fn update_tilemap(
                 println!("debug: Terrain Rule: {:?}", active_rule);
                 let texture_index = TileTexture::from(&active_rule.grass);
                 *tile_texture = texture_index;
-                println!("debug: Terrain Rule: Resolved to texture_index: {:?}", texture_index);
+                println!(
+                    "debug: Terrain Rule: Resolved to texture_index: {:?}",
+                    texture_index
+                );
             }
         }
     }
