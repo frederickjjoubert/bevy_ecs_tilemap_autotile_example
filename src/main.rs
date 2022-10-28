@@ -47,9 +47,7 @@ fn main() {
         .add_startup_system(
             setup_game
                 .label(Setup::Game)
-                .after(Setup::Rules)
                 .after(Setup::ActiveRules)
-                .after(Setup::Sprites)
                 .after(Setup::Tilemap),
         )
         .add_system(update_camera_movement)
@@ -78,9 +76,7 @@ pub struct UpdateTilemapEvent {}
 // === Enums ===
 #[derive(Debug, Clone, PartialEq, Eq, Hash, SystemLabel)]
 enum Setup {
-    Rules,
     ActiveRules,
-    Sprites,
     Tilemap,
     Game,
 }
@@ -142,7 +138,7 @@ pub struct Sprites {
 }
 
 pub struct Rules {
-    pub rules: HashMap<TerrainType, Vec<(TerrainRule, Tile)>>,
+    pub rules: HashMap<TerrainType, Vec<TerrainRule>>,
 }
 
 pub struct ActiveRules {
@@ -353,46 +349,25 @@ pub fn update_tilemap(
         (&TilePos, &mut TileTexture),
         (With<GrassTile>, Without<DirtTile>, Without<WaterTile>),
     >,
-    mut dirt_tiles_query: Query<
-        (&TilePos, &mut TileTexture),
-        (With<DirtTile>, Without<GrassTile>, Without<WaterTile>),
-    >,
-    mut _water_tiles_query: Query<
-        (&TilePos, &mut TileTexture),
-        (With<WaterTile>, Without<GrassTile>, Without<DirtTile>),
-    >,
-    sprites: Res<Sprites>,
+    // mut dirt_tiles_query: Query<
+    //     (&TilePos, &mut TileTexture),
+    //     (With<DirtTile>, Without<GrassTile>, Without<WaterTile>),
+    // >,
+    // mut water_tiles_query: Query<
+    //     (&TilePos, &mut TileTexture),
+    //     (With<WaterTile>, Without<GrassTile>, Without<DirtTile>),
+    // >,
     active_rules: Res<ActiveRules>,
-    rules: Res<Rules>,
 ) {
     // Perform auto tiling based on neighbors and rules
     if active_rules.is_changed() {
-        let possible_rules = &rules.rules[&TerrainType::Grass];
         for (tile_position, mut tile_texture) in grass_tiles_query.iter_mut() {
             if active_rules.active_rules.contains_key(tile_position) {
                 let active_rule = &active_rules.active_rules[tile_position];
-                let mut new_sprite = Tile::Blank;
-                for (rule, sprite) in possible_rules.iter() {
-                    if *active_rule == *rule {
-                        new_sprite = sprite.clone();
-                        break;
-                    }
-                }
-                tile_texture.0 = sprites.sprite_lookup_table[&new_sprite];
-            }
-        }
-        let possible_rules = &rules.rules[&TerrainType::Dirt];
-        for (tile_position, mut tile_texture) in dirt_tiles_query.iter_mut() {
-            if active_rules.active_rules.contains_key(tile_position) {
-                let active_rule = &active_rules.active_rules[tile_position];
-                let mut new_sprite = Tile::Blank;
-                for (rule, sprite) in possible_rules.iter() {
-                    if *active_rule == *rule {
-                        new_sprite = sprite.clone();
-                        break;
-                    }
-                }
-                tile_texture.0 = sprites.sprite_lookup_table[&new_sprite];
+                println!("debug: Terrain Rule: {:?}", active_rule);
+                let texture_index = TileTexture::from(&active_rule.grass);
+                *tile_texture = texture_index;
+                println!("debug: Terrain Rule: Resolved to texture_index: {:?}", texture_index);
             }
         }
     }

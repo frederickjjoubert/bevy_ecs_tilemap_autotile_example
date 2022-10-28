@@ -7,10 +7,11 @@ use bevy::prelude::{Entity, Query, With, Without};
 use bevy_ecs_tilemap::helpers::square_grid::neighbors::{Neighbors, SQUARE_DIRECTIONS};
 use bevy_ecs_tilemap::prelude::TilePos;
 
+#[derive(Debug)]
 pub struct TerrainRule {
-    grass: GrassRule,
-    dirt: DirtRule,
-    water: WaterRule,
+    pub grass: GrassRule,
+    pub dirt: DirtRule,
+    pub water: WaterRule,
 }
 
 impl PartialEq for TerrainRule {
@@ -44,7 +45,6 @@ impl TerrainRule {
                 if grass_tiles_query.get(entity).is_ok() {
                     grass_rule_flag.insert(direction.into());
                 }
-
                 if dirt_tiles_query.get(entity).is_ok() {
                     dirt_rule_flag.insert(direction.into());
                 }
@@ -55,11 +55,13 @@ impl TerrainRule {
             }
         }
 
-
-        TerrainRule {
+        let terrain_rule = TerrainRule {
             grass: GrassRule { rule_flag: grass_rule_flag },
             dirt: DirtRule { rule_flag: dirt_rule_flag },
             water: WaterRule { rule_flag: water_rule_flag },
-        }
+        };
+        // println!("debug TerrainRule: {:?}", terrain_rule);
+
+        return terrain_rule;
     }
 }
