@@ -18,6 +18,13 @@ Click to place tiles.
 - Press 2 to select dirt tiles.
 - Press 3 to select water tiles.
 
+# Reading / Research
+
+- [https://www.boristhebrave.com/2021/11/14/classification-of-tilesets/](https://www.boristhebrave.com/2021/11/14/classification-of-tilesets/)
+- [http://www.cr31.co.uk/stagecast/wang/blob.html](http://www.cr31.co.uk/stagecast/wang/blob.html)
+- [https://www.boristhebrave.com/2021/09/12/beyond-basic-autotiling/](https://www.boristhebrave.com/2021/09/12/beyond-basic-autotiling/)
+- [https://gamedevelopment.tutsplus.com/tutorials/how-to-use-tile-bitmasking-to-auto-tile-your-level-layouts--cms-25673](https://gamedevelopment.tutsplus.com/tutorials/how-to-use-tile-bitmasking-to-auto-tile-your-level-layouts--cms-25673)
+
 # Assets
 
 I am using the following free assets, please note their READMES and LICENSES.
