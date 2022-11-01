@@ -80,6 +80,7 @@ enum Setup {
     Game,
 }
 
+#[allow(non_camel_case_types)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Sprite {
     Blank,
@@ -107,7 +108,8 @@ pub enum Sprite {
     Grass_010_110_110,
     Grass_011_011_011,
     Grass_011_111_110,
-    Grass_000_000_000, // Blank
+    Grass_000_000_000,
+    // Blank
     Grass_110_111_110,
     // Grass Row 3
     Grass_010_010_000,
@@ -159,7 +161,8 @@ pub enum Sprite {
     Dirt_010_110_110,
     Dirt_011_011_011,
     Dirt_011_111_110,
-    Dirt_000_000_000, // Blank
+    Dirt_000_000_000,
+    // Blank
     Dirt_110_111_110,
     // Dirt Row 3
     Dirt_010_010_000,
@@ -2879,7 +2882,7 @@ pub fn place_tile(
     mut update_tilemap_event_writer: EventWriter<UpdateTilemapEvent>,
     game_state: Res<GameState>,
     mouse: Res<Mouse>,
-    mouse_input: Res<Input<MouseButton>>,
+    // mouse_input: Res<Input<MouseButton>>,
     tilemap_query: Query<(
         &TilemapSize,
         &TilemapGridSize,
@@ -2889,7 +2892,7 @@ pub fn place_tile(
     )>,
 ) {
     if mouse.holding_lmb {
-        // if mouse_input.justs_pressed(MouseButton::Left) {
+        // if mouse_input.just_pressed(MouseButton::Left) {
         for (map_size, grid_size, map_type, tile_storage, map_transform) in tilemap_query.iter() {
             // Grab the cursor position from the `Res<CursorPos>`
             let cursor_pos: Vec3 = mouse.world_position;
@@ -2903,7 +2906,7 @@ pub fn place_tile(
             };
             // Once we have a world position we can transform it into a possible tile position.
             if let Some(tile_position) =
-                TilePos::from_world_pos(&cursor_in_map_pos, map_size, grid_size, map_type)
+            TilePos::from_world_pos(&cursor_in_map_pos, map_size, grid_size, map_type)
             {
                 if let Some(tile_entity) = tile_storage.get(&tile_position) {
                     commands.entity(tile_entity).remove::<GrassTile>();
@@ -3375,10 +3378,6 @@ pub fn update_tilemap(
         (&TilePos, &mut TileTexture),
         (With<DirtTile>, Without<GrassTile>, Without<WaterTile>),
     >,
-    mut water_tiles_query: Query<
-        (&TilePos, &mut TileTexture),
-        (With<WaterTile>, Without<GrassTile>, Without<DirtTile>),
-    >,
     sprites: Res<Sprites>,
     active_rules: Res<ActiveRules>,
     rules: Res<Rules>,
@@ -3434,7 +3433,7 @@ pub fn update_selection(keyboard: Res<Input<KeyCode>>, mut game_state: ResMut<Ga
 
 pub fn update_mouse(
     mut mouse: ResMut<Mouse>,
-    mut mouse_input: Res<Input<MouseButton>>,
+    mouse_input: Res<Input<MouseButton>>,
     windows: Res<Windows>,
     camera_q: Query<(&Transform, &Camera)>,
     mut cursor_moved_events: EventReader<CursorMoved>,
